@@ -1,5 +1,9 @@
 pylint
 pytest
-click
 black
+click
+Flask
+markupsafe
+joblib
 pytest-cov
+requests
