@@ -12,7 +12,7 @@ LOG.setLevel(logging.INFO)
 @app.route("/")
 def home():
     html = f"<h3>Hello World Python Flask</h3>"
-     LOG.info(f"Accesing Root directory")
+    LOG.info(f"Accesing Root directory")
     return html.format(format)
 
 if __name__ == "__main__":
