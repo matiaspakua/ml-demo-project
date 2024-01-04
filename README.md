@@ -1,6 +1,6 @@
 # ml-demo-project
 
-This is the demostration project for the Specialization Building Cloud Computing Solutions at Scale bu Noah Gift.
+This is the demostration project for the Specialization Building Cloud Computing Solutions at Scale by Noah Gift.
 
 # Description
 
