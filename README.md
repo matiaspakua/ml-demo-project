@@ -4,9 +4,13 @@ This is the demostration project for the Specialization Building Cloud Computing
 
 # Description
 
-1. use a model TensorFlow Hub image classifier model: https://tfhub.dev/google/imagenet/mobilenet_v2_140_224/classification/5
+## Deploy a simple Flask app into AWS.
 
-2. Python Flask app that can load the model and make predictions on images.  reference: https://dev.to/dishant2001/deploy-your-deep-learning-model-with-flask-on-aws-ec2-instance-5h34
+1. Python Flask app that can load the model and make predictions on images.  reference: https://dev.to/dishant2001/deploy-your-deep-learning-model-with-flask-on-aws-ec2-instance-5h34
+
+## Configure a model to generate preditions 
+
+2. use a model TensorFlow Hub image classifier model: https://tfhub.dev/google/imagenet/mobilenet_v2_140_224/classification/5
 
 3. Dockerfile to containerize Flask app and the model.  reference: https://github.com/epigramai/tf-serving-flask-app/blob/master/Dockerfile
 
