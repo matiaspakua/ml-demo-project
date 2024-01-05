@@ -1,4 +1,4 @@
-name: cd-build-publich-docker-image
+name: cd-build-publish-docker-image
 
 on:
   workflow_run:
@@ -24,16 +24,4 @@ jobs:
       run: docker build -t matiasmiguez/ml-demo-project:latest . --file Dockerfile
     - name: Push to DockerHub
       run: docker push matiasmiguez/ml-demo-project:latest
-    
-  run:
-  
-    runs-on: self-hosted
-
-    steps:
-    - name: Pull Docker image
-      run: sudo docker pull docker pull matiasmiguez/ml-demo-project:latest
-    - name: Delete Old docker container
-      run: sudo docker rm -f ml-demo-project-container || true
-    - name: Run Docker Container
-      run: sudo docker run -d -p 8080:8080 --name ml-demo-project-container matiasmiguez/ml-demo-project
   
