@@ -1,23 +1,24 @@
-# ml-demo-project
+# Python Flask ML Demo Project wi CI/CD
 
 [![Python application](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml)
 
-This is the demostration project for the Specialization Building Cloud Computing Solutions at Scale by Noah Gift.
+This is the demonstration project for the Course - Duke university: **Specialization Building Cloud Computing Solutions at Scale** by Noah Gift.
 
-# Description
+# Project Overview
 
-## Deploy a simple Flask app into AWS.
+This project demonstrates how to develop a Flask web application for image classification using the MobileNetV2 pre-trained model from TensorFlow Hub. MobileNetV2 is a lightweight convolutional neural network (CNN) architecture, making it ideal for deploying on mobile devices and web applications.
 
-1. Python Flask app that can load the model and make predictions on images.  reference: https://dev.to/dishant2001/deploy-your-deep-learning-model-with-flask-on-aws-ec2-instance-5h34
+The project utilizes the TensorFlow Hub library to load the pre-trained MobileNetV2 model and integrate it with the Flask application. Users can upload images to the application, which are then processed by the MobileNetV2 model to predict the class of the image. The predicted class is displayed to the user along with the model's confidence score.
 
-## Configure a model to generate preditions 
+# Project Structure
 
-2. use a model TensorFlow Hub image classifier model: https://tfhub.dev/google/imagenet/mobilenet_v2_140_224/classification/5
+The project is structured as follows:
 
-3. Dockerfile to containerize Flask app and the model.  reference: https://github.com/epigramai/tf-serving-flask-app/blob/master/Dockerfile
-
-https://www.coursera.org/learn/cloud-virtualization-containers-api-duke/lecture/ASOnh/push-to-project-to-aws-ecr-registry
-
-4. Push Docker image to a registry  Amazon Elastic Container Registry (Amazon ECR).
-5. Deploy Docker image to AWS using Amazon Elastic Container Service (Amazon ECS) or Amazon Elastic Kubernetes Service (Amazon EKS).  reference: https://aws.amazon.com/blogs/opensource/deploying-python-flask-microservices-to-aws-using-open-source-tools/
-6. simple web-based interface that can send images to your Flask API and display the predictions. reference: https://github.com/epigramai/tf-serving-flask-app/blob/master/templates/index.html
+1. **.github:** This directory contains the yaml files for CI configuration and CD configuration.
+    
+2. **app_test.py:** this file contains the unit test for each method (using pytest).
+    
+3. **templates:** This directory contains the static HTML and CSS files for the web application's user interface.
+    
+5. **app.py:** This file defines the Flask application and runs the web server.
+# Project Setup and Deployment
