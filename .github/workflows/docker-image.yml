@@ -1,9 +1,11 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
-
+  workflow_run:
+    workflows: ["ci-build-python-app"]
+    types: 
+      - completed
+  
 jobs:
 
   build:
