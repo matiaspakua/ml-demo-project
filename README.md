@@ -1,5 +1,7 @@
 # ml-demo-project
 
+[![Python application](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml)
+
 This is the demostration project for the Specialization Building Cloud Computing Solutions at Scale by Noah Gift.
 
 # Description
