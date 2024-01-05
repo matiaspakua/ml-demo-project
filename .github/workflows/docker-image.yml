@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: cd-build-publich-docker-image
 
 on:
   workflow_run:
@@ -18,7 +18,7 @@ jobs:
       env:
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_PASSWORD
+      run: docker login -u $DOCKER_USERNAME --password $DOCKER_PASSWORD
       
     - name: Build the Docker image
       run: docker build -t ml-demo-project . --file Dockerfile --tag ml-demo-app:$(date +%s)
