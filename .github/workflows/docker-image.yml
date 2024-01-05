@@ -21,7 +21,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME --password $DOCKER_PASSWORD
       
     - name: Build the Docker image
-      run: docker build -t ml-demo-project . --file Dockerfile
+      run: docker build -t matiasmiguez/ml-demo-project:latest . --file Dockerfile
     - name: Push to DockerHub
       run: docker push matiasmiguez/ml-demo-project:latest
     
