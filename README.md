@@ -20,5 +20,5 @@ The project is structured as follows:
     
 3. **templates:** This directory contains the static HTML and CSS files for the web application's user interface.
     
-5. **app.py:** This file defines the Flask application and runs the web server.
+4. **app.py:** This file defines the Flask application and runs the web server.
 # Project Setup and Deployment
