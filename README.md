@@ -28,3 +28,12 @@ The project is structured as follows:
 1. Install Python v3.11 (does not work with python 3.12)
 2. Install Docker
 3. Install Git and create a github account. Configure credential and SSH connection.
+4. Execute first time in the console:
+
+```bash
+ matias@ml-demo-project$ pip install -r requirements.txt 
+```
+
+5. validate that all the dependencies listed in the "requirements.txt" are properly installed.
+
+## Development
