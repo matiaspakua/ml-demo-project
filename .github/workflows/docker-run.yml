@@ -14,6 +14,6 @@ jobs:
 
     steps:
     - name: Pull Docker image
-      run: sudo docker pull matiasmiguez/ml-demo-project:latest
+      run: 'sudo docker pull matiasmiguez/ml-demo-project:latest'
     - name: Run Docker Container
-      run: sudo docker run -d -p 8080:8080 --name ml-demo-project-container matiasmiguez/ml-demo-project
+      run: 'sudo docker run -d -p 8080:8080 --name ml-demo-project-container matiasmiguez/ml-demo-project'
