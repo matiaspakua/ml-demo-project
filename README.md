@@ -22,3 +22,9 @@ The project is structured as follows:
     
 4. **app.py:** This file defines the Flask application and runs the web server.
 # Project Setup and Deployment
+
+## Setup
+
+1. Install Python v3.11 (does not work with python 3.12)
+2. Install Docker
+3. Install Git and create a github account. Configure credential and SSH connection.
