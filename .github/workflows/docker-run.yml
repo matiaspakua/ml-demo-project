@@ -8,6 +8,14 @@ jobs:
   run:
     runs-on: self-hosted
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -15,6 +23,6 @@ jobs:
           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           aws-region: us-east-1
       - name: Pull Docker image
-        run: sudo docker pull "matiasmiguez/ml-demo-project:latest"
+        run: sudo docker pull 'matiasmiguez/ml-demo-project:latest'
       - name: Run Docker Container
-        run: sudo docker run -d -p 8080:8080 --name ml-demo-project-container "matiasmiguez/ml-demo-project"
+        run: sudo docker run -d -p 8080:8080 --name ml-demo-project-container 'matiasmiguez/ml-demo-project'
