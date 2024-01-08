@@ -1,18 +1,12 @@
 name: run-docker-image
-
 on:
   workflow_run:
     workflows: ["cd-build-publish-docker-image"]
-    types: 
+    types:
       - completed
-  
 jobs:
-    
   run:
-  
     runs-on: self-hosted
-
-
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
