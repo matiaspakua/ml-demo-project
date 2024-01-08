@@ -1,10 +1,21 @@
 # Python Flask ML Demo Project wi CI/CD
 
-[![Python application](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml)
+## CI Status
 
-This is the demonstration project for the Course - Duke university: **Specialization Building Cloud Computing Solutions at Scale** by Noah Gift.
+[![ci-build-python-app](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml)
+
+## CD status (docker build and push)
+
+[![cd-build-publish-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml)
+
+## CD Status (AWS EC2 docker pull and run)
+
+[![run-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml)
+
 
 # Project Overview
+
+This is the demonstration project for the Course - Duke university: **Specialization Building Cloud Computing Solutions at Scale** by Noah Gift.
 
 This project demonstrates how to develop a Flask web application for image classification using the MobileNetV2 pre-trained model from TensorFlow Hub. MobileNetV2 is a lightweight convolutional neural network (CNN) architecture, making it ideal for deploying on mobile devices and web applications.
 
@@ -35,5 +46,16 @@ The project is structured as follows:
 ```
 
 5. validate that all the dependencies listed in the "requirements.txt" are properly installed.
+
+### Setup AWS EC2 instance
+
+
+### Install docker in Ubuntu 20.04 instance:
+
+Follow the next instructions:
+ - https://linux.how2shout.com/how-to-install-docker-on-aws-ec2-ubuntu-22-04-or-20-04-linux/
+
+### Configure Github Action Runner for Workflow
+
 
 ## Development
