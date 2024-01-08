@@ -32,7 +32,13 @@ The project is structured as follows:
 3. **templates:** This directory contains the static HTML and CSS files for the web application's user interface.
     
 4. **app.py:** This file defines the Flask application and runs the web server.
-# Project Setup and Deployment
+
+## Project Deployment Workflow
+
+The code for the app is stored in a GitHub repository, which allows for easy version control and collaboration. The app is automatically build and test in a github workflow. Then a docker image is create and pushed in DockerHub public repository in another workflow. A third workflow is executed when the first two are executed successfully and the image is pulled and deployed in a AWS Ubuntu EC2 instance.
+
+
+##  Project Setup and Deployment
 
 ## Setup
 

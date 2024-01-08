@@ -44,15 +44,9 @@
 	 <div style="text-align: left; max-width: 800px; margin: auto;">
 	  <h1>Image Classification App with TensorFlow, Flask, AWS App Runner, and GitHub</h1>
 
-	  <p>This is a Python Flask application that uses TensorFlow and the MobileNetV2 model to classify images. The app is running on an AWS App Runner instance and the code is automatically deployed from a GitHub repository.</p>
+	  <p>This is a Python Flask application that uses TensorFlow and the MobileNetV2 model to classify images. The app is running on an AWS EC2 instance and the code is automatically deployed from a GitHub repository.</p>
 
 	  <p>The MobileNetV2 model is a convolutional neural network that is designed to classify images into 1000 object categories, such as keyboard, mouse, pencil, and many animals. The model is trained on more than a million images from the ImageNet database.</p>
-
-	  <p>The Flask app allows users to upload an image and classify it using the MobileNetV2 model. The app is hosted on an AWS App Runner instance, which is a fully managed service that makes it easy to build, deploy, and scale containerized applications quickly and easily.</p>
-
-	  <p>The code for the app is stored in a GitHub repository, which allows for easy version control and collaboration. The app is automatically deployed from the repository using GitHub Actions, which is a powerful tool for automating software workflows.</p>
-
-	  <p>Overall, this project demonstrates how to build a modern image classification app using Python, TensorFlow, Flask, AWS App Runner, and GitHub. It is a great example of how to leverage the power of cloud computing and open source software to build scalable and reliable applications.</p>
 	</div>
     <form action="/predict" method="post" enctype="multipart/form-data">
         <input type="file" name="image">
