@@ -49,6 +49,7 @@ The project is structured as follows:
 
 ### Setup AWS EC2 instance
 
+Launch new instance of EC2 with Ubuntu 20.04.
 
 ### Install docker in Ubuntu 20.04 instance:
 
