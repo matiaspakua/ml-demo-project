@@ -16,5 +16,5 @@ jobs:
           aws-region: us-east-1
       - name: Pull Docker image
         run: sudo docker pull 'matiasmiguez/ml-demo-project:latest'
-      - name: Run Docker Container
+      - name: Run Docker Container at port 8080
         run: sudo docker run -d -p 8080:8080 --name ml-demo-project-container 'matiasmiguez/ml-demo-project'
