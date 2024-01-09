@@ -1,10 +1,10 @@
-# Python Flask ML Demo Project wi CI/CD
+# Python Flask ML Demo Project with CI/CD in AWS EC2
 
-## CI Status
+## CI Status (build and test)
 
 [![ci-build-python-app](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml)
 
-## CD status (docker build and push)
+## CD status (docker build and push in DockerHub)
 
 [![cd-build-publish-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml)
 
