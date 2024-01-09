@@ -130,13 +130,15 @@ The development flow need to follow the best practices:
 
 For the validation of the current application exits a series of images in the folder: **/images/test/** that can be used to "acceptance testing" as follow:
 
-| Test Case # | Test input Images | Expected Restult |
+| Test Case | Test input Images | Expected Restult |
 | ---- | ---- | ---- |
 | 01 | image.jpg | solar_dish<br><br>0.7601 |
 | 02 | image1.jpg | boathouse<br><br>0.2617 |
 | 03 | image2.jpg | tabby<br><br>0.2365 |
 | 04 | image3.jpg | sports_car<br><br>0.5183 |
 | 05 | image4.jpg | dining_table<br><br>0.3249 |
+
+
 Each result gives 3 matches from the highest to the lowest probability of similarity, like the following example:
 
 ![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/images_probability_result.png)
