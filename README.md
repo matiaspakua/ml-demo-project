@@ -30,7 +30,7 @@ The project is structured as follows:
 
 The following diagram describe the high level architecture of the Application and the CI/CD process:
 
-![](../images/ML-Demo-project.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/595a2ebac6d0ec0e2d49d64d78ba06951692cab6/images/ML-Demo-project.png)
 ### Step 01
 The code for the app is stored in a GitHub repository, which allows for easy version control and collaboration. The app is automatically build and test in a github workflow. 
 
@@ -46,7 +46,7 @@ A third workflow is executed when the first two are executed successfully and th
 
 [Link to YML: docker-run.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-run.yml)
 
-![](../images/docker_hub_image_push.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/595a2ebac6d0ec0e2d49d64d78ba06951692cab6/images/docker_hub_image_push.png)
 
 ### Step 04
 
