@@ -9,8 +9,13 @@ This is the demonstration project for the Course - Duke university: **Specializa
 
 This project demonstrates how to develop a Flask web application for image classification using the MobileNetV2 pre-trained model from TensorFlow Hub. MobileNetV2 is a lightweight convolutional neural network (CNN) architecture, making it ideal for deploying on mobile devices and web applications.
 
+[Pre-Trained Model webpage]((https://pytorch.org/hub/pytorch_vision_mobilenet_v2/))
+
 The project utilizes the TensorFlow Hub library to load the pre-trained MobileNetV2 model and integrate it with the Flask application. Users can upload images to the application, which are then processed by the MobileNetV2 model to predict the class of the image. The predicted class is displayed to the user along with the model's confidence score.
 
+[TensoyFlow Project](https://www.tensorflow.org/)
+
+[Hub of pre-trained models](https://www.kaggle.com/models?tfhub-redirect=true)
 # Project Structure
 
 The project is structured as follows:
@@ -22,6 +27,10 @@ The project is structured as follows:
 5. **Dockerfile**: file that create the image of the APP to be deployed in a environment where docker is available.
 6. **requirements.txt** : file that contains all the dependency needed by the project.
 ## Project Deployment Workflow
+
+The following diagram describe the high level architecture of the Application and the CI/CD process:
+
+
 
 ### Step 01
 The code for the app is stored in a GitHub repository, which allows for easy version control and collaboration. The app is automatically build and test in a github workflow. 
