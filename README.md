@@ -9,7 +9,7 @@ This is the demonstration project for the Course - Duke university: **Specializa
 
 This project demonstrates how to develop a Flask web application for image classification using the MobileNetV2 pre-trained model from TensorFlow Hub. MobileNetV2 is a lightweight convolutional neural network (CNN) architecture, making it ideal for deploying on mobile devices and web applications.
 
-[Pre-Trained Model webpage]((https://pytorch.org/hub/pytorch_vision_mobilenet_v2/))
+[Pre-Trained Model webpage](https://pytorch.org/hub/pytorch_vision_mobilenet_v2/)
 
 The project utilizes the TensorFlow Hub library to load the pre-trained MobileNetV2 model and integrate it with the Flask application. Users can upload images to the application, which are then processed by the MobileNetV2 model to predict the class of the image. The predicted class is displayed to the user along with the model's confidence score.
 
@@ -30,8 +30,7 @@ The project is structured as follows:
 
 The following diagram describe the high level architecture of the Application and the CI/CD process:
 
-
-
+![](../images/ML-Demo-project.png)
 ### Step 01
 The code for the app is stored in a GitHub repository, which allows for easy version control and collaboration. The app is automatically build and test in a github workflow. 
 
@@ -41,7 +40,6 @@ The code for the app is stored in a GitHub repository, which allows for easy ver
 Then a docker image is create and pushed in DockerHub public repository in another workflow. 
 
 [Link to YML: docker-image.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-image.yml)
-
 
 ### Step 03
 A third workflow is executed when the first two are executed successfully and the image is pulled and deployed in a AWS Ubuntu EC2 instance.
@@ -60,9 +58,11 @@ Validate that the workflows works properly:
 
 The last step is wait until the image is pulled and running in the EC2 Ubuntu instance and access the public URL to log into the landing page of the app:
 
-[Landing page on EC2 instance]()
+[Landing page on EC2 instance](http://ec2-54-227-35-67.compute-1.amazonaws.com:8080/)
 
-##  Project Setup and Deployment
+![](../images/ml_demo_landing_page.png)
+
+## Project Setup and Deployment
 
 ## Setup
 
@@ -132,11 +132,11 @@ For the validation of the current application exits a series of images in the fo
 
 | Test Case # | Test input Images | Expected Restult |
 | ---- | ---- | ---- |
-| 01 | image.jpg | solar_dish<br><br>0.7601302862167358 |
-| 02 | image1.jpg | boathouse<br><br>0.2617475390434265 |
-| 03 | image2.jpg | tabby<br><br>0.23651355504989624 |
-| 04 | image3.jpg | sports_car<br><br>0.5183640718460083 |
-| 05 | image4.jpg | dining_table<br><br>0.3249382972717285 |
+| 01 | image.jpg | solar_dish<br><br>0.7601 |
+| 02 | image1.jpg | boathouse<br><br>0.2617 |
+| 03 | image2.jpg | tabby<br><br>0.2365 |
+| 04 | image3.jpg | sports_car<br><br>0.5183 |
+| 05 | image4.jpg | dining_table<br><br>0.3249 |
 Each result gives 3 matches from the highest to the lowest probability of similarity, like the following example:
 
 ![](../images/images_probability_result.png)
