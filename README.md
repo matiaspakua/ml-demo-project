@@ -1,18 +1,8 @@
 # Python Flask ML Demo Project with CI/CD in AWS EC2
 
-## CI Status (build and test)
-
-[![ci-build-python-app](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml)
-
-## CD status (docker build and push in DockerHub)
-
-[![cd-build-publish-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml)
-
-## CD Status (AWS EC2 docker pull and run)
-
-[![run-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml)
-
-
+| 1. CI Status <br>(build and test) | 2. CD status <br>(docker build and push in DockerHub) | 3. CD Status <br>(AWS EC2 docker pull and run) |
+| ---- | ---- | ---- |
+| [![ci-build-python-app](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml) | [![cd-build-publish-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml) | [![run-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml) |
 # Project Overview
 
 This is the demonstration project for the Course - Duke university: **Specialization Building Cloud Computing Solutions at Scale** by Noah Gift.
@@ -49,7 +39,15 @@ A third workflow is executed when the first two are executed successfully and th
 
 [Link to YML: docker-run.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-run.yml)
 
+![](../images/docker_hub_image_push.png)
+
 ### Step 04
+
+Validate that the workflows works properly:
+
+![](../images/repository_workflows.png)
+
+### Step 05
 
 The last step is wait until the image is pulled and running in the EC2 Ubuntu instance and access the public URL to log into the landing page of the app:
 
@@ -72,14 +70,49 @@ The last step is wait until the image is pulled and running in the EC2 Ubuntu in
 
 ### Setup AWS EC2 instance
 
-Launch new instance of EC2 with Ubuntu 20.04.
+Launch new instance of EC2 with Ubuntu 20.04, using all the default parameters of the Free-Tier.
+
+![](../images/aws_ec2_ubuntu_instance.png)
+![]()
+
+Ensure that you enable all the traffic (in and out) for testing purposes:
+
+![](../images/aws_ec2_instance_creation.png)
 
 ### Install docker in Ubuntu 20.04 instance:
 
-Follow the next instructions:
+Follow the next instructions to install docker on the Ubuntu instance.
  - https://linux.how2shout.com/how-to-install-docker-on-aws-ec2-ubuntu-22-04-or-20-04-linux/
 
-### Configure Github Action Runner for Workflow
+After the installation, verify that docker is properly configured and running:
 
+![](../images/aws_ec2_instance_docker_installed.png)
+### Configure GitHub Action Runner for Workflow
+
+After the EC2 instance is properly up and running with docker, is needed to configure the workflows and runners in github to communicate to EC2 to pull and run the builded image of the application from a public repository, in this case: DockerHub.
+
+To do this, follow the instructions on the github actions section:
+
+![](../images/github_runner_installation.png)
+
+After installed the runner daemon in the EC2 Ubuntu instance, validate that is properly installed and running in background:
+
+![](../images/github_runner_folder_installation.png)
+
+Verify is running:
+
+![](../images/github_runner_running.png)
 
 ## Development
+
+The development flow need to follow the best practices:
+
+1. Clean code
+2. Modularity
+3. Cohesion
+4. Testing
+5. Commit (small) to a version control.
+6. Verify CI
+7. Verify CD
+8. Integration / acceptance testing
+9. Documentation.
