@@ -116,3 +116,18 @@ The development flow need to follow the best practices:
 7. Verify CD
 8. Integration / acceptance testing
 9. Documentation.
+
+## Acceptance Testing
+
+For the validation of the current application exits a series of images in the folder: **/images/test/** that can be used to "acceptance testing" as follow:
+
+| Test Case # | Test input Images | Expected Restult |
+| ---- | ---- | ---- |
+| 01 | image.jpg | solar_dish<br><br>0.7601302862167358 |
+| 02 | image1.jpg | boathouse<br><br>0.2617475390434265 |
+| 03 | image2.jpg | tabby<br><br>0.23651355504989624 |
+| 04 | image3.jpg | sports_car<br><br>0.5183640718460083 |
+| 05 | image4.jpg | dining_table<br><br>0.3249382972717285 |
+Each result gives 3 matches from the highest to the lowest probability of similarity, like the following example:
+
+![](../images/images_probability_result.png)
