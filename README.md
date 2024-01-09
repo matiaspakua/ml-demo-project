@@ -25,18 +25,35 @@ The project utilizes the TensorFlow Hub library to load the pre-trained MobileNe
 
 The project is structured as follows:
 
-1. **.github:** This directory contains the yaml files for CI configuration and CD configuration.
-    
-2. **app_test.py:** this file contains the unit test for each method (using pytest).
-    
-3. **templates:** This directory contains the static HTML and CSS files for the web application's user interface.
-    
-4. **app.py:** This file defines the Flask application and runs the web server.
-
+1. **github\workflows**: This directory contains the yaml files for CI configuration and CD configuration.
+2. **/templates:** This directory contains the static HTML and CSS files for the web application's user interface.
+3. **app.py:** This file defines the Flask application and runs the web server.
+4. **app_test.py:** this file contains the unit test for each method (using pytest).>
+5. **Dockerfile**: file that create the image of the APP to be deployed in a environment where docker is available.
+6. **requirements.txt** : file that contains all the dependency needed by the project.
 ## Project Deployment Workflow
 
-The code for the app is stored in a GitHub repository, which allows for easy version control and collaboration. The app is automatically build and test in a github workflow. Then a docker image is create and pushed in DockerHub public repository in another workflow. A third workflow is executed when the first two are executed successfully and the image is pulled and deployed in a AWS Ubuntu EC2 instance.
+### Step 01
+The code for the app is stored in a GitHub repository, which allows for easy version control and collaboration. The app is automatically build and test in a github workflow. 
 
+[Link to YML: python-app.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/python-app.yml)
+
+### Step 02
+Then a docker image is create and pushed in DockerHub public repository in another workflow. 
+
+[Link to YML: docker-image.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-image.yml)
+
+
+### Step 03
+A third workflow is executed when the first two are executed successfully and the image is pulled and deployed in a AWS Ubuntu EC2 instance.
+
+[Link to YML: docker-run.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-run.yml)
+
+### Step 04
+
+The last step is wait until the image is pulled and running in the EC2 Ubuntu instance and access the public URL to log into the landing page of the app:
+
+[Landing page on EC2 instance]()
 
 ##  Project Setup and Deployment
 
