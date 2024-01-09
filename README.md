@@ -52,7 +52,7 @@ A third workflow is executed when the first two are executed successfully and th
 
 Validate that the workflows works properly:
 
-![](../images/repository_workflows.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/repository_workflows.png)
 
 ### Step 05
 
@@ -60,7 +60,7 @@ The last step is wait until the image is pulled and running in the EC2 Ubuntu in
 
 [Landing page on EC2 instance](http://ec2-54-227-35-67.compute-1.amazonaws.com:8080/)
 
-![](../images/ml_demo_landing_page.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/ml_demo_landing_page.png)
 
 ## Project Setup and Deployment
 
@@ -81,12 +81,12 @@ The last step is wait until the image is pulled and running in the EC2 Ubuntu in
 
 Launch new instance of EC2 with Ubuntu 20.04, using all the default parameters of the Free-Tier.
 
-![](../images/aws_ec2_ubuntu_instance.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/aws_ec2_ubuntu_instance.png)
 ![]()
 
 Ensure that you enable all the traffic (in and out) for testing purposes:
 
-![](../images/aws_ec2_instance_creation.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/aws_ec2_instance_creation.png)
 
 ### Install docker in Ubuntu 20.04 instance:
 
@@ -95,22 +95,22 @@ Follow the next instructions to install docker on the Ubuntu instance.
 
 After the installation, verify that docker is properly configured and running:
 
-![](../images/aws_ec2_instance_docker_installed.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/aws_ec2_instance_docker_installed.png)
 ### Configure GitHub Action Runner for Workflow
 
 After the EC2 instance is properly up and running with docker, is needed to configure the workflows and runners in github to communicate to EC2 to pull and run the builded image of the application from a public repository, in this case: DockerHub.
 
 To do this, follow the instructions on the github actions section:
 
-![](../images/github_runner_installation.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/github_runner_installation.png)
 
 After installed the runner daemon in the EC2 Ubuntu instance, validate that is properly installed and running in background:
 
-![](../images/github_runner_folder_installation.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/github_runner_folder_installation.png)
 
 Verify is running:
 
-![](../images/github_runner_running.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/github_runner_running.png)
 
 ## Development
 
@@ -139,4 +139,4 @@ For the validation of the current application exits a series of images in the fo
 | 05 | image4.jpg | dining_table<br><br>0.3249 |
 Each result gives 3 matches from the highest to the lowest probability of similarity, like the following example:
 
-![](../images/images_probability_result.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/images_probability_result.png)
