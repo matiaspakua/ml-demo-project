@@ -1,12 +1,12 @@
 setup:
-    	@echo "Creating a Python virtual environment..."
+	@echo "Creating a Python virtual environment..."
 	python -m venv ~/.flask-ml-demo
 
-    	@echo "WINDOWS Activating the virtual environment..."	
+	@echo "WINDOWS Activating the virtual environment..."	
 	source ~/.flask-ml-demo/Scripts/activate
 	
 	@echo "LINUX Activating the virtual environment..."
-	source flask-ml-demo/bin/activate
+	@source flask-ml-demo/bin/activate
 
 install:
 	@echo "Install process: upgrade and install requirements..."
