@@ -45,7 +45,7 @@ def test_home_content(app):
 
 def test_prepare_image_with_valid_image_path():
     # Set up
-    image_path = "image/image.jpg"
+    image_path = "images/test/image.jpg"
 
     # Call the function
     img_array = prepare_image(image_path)
@@ -73,7 +73,7 @@ def test_prepare_image_with_invalid_image_path():
 
 def test_predict_with_valid_image():
     # Set up
-    valid_image_path = "images/image.jpg"
+    valid_image_path = "images/test/image.jpg"
     with open(valid_image_path, "rb") as f:
         image = FileStorage(f)
 
