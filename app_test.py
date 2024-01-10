@@ -64,3 +64,45 @@ def test_prepare_image_with_invalid_image_path():
     # Call the function
     with pytest.raises(FileNotFoundError):
         img_array = prepare_image(invalid_image_path)
+
+
+def test_predict_with_valid_image():
+    # Set up
+    valid_image_path = "images/image.jpg"
+    with open(valid_image_path, "rb") as f:
+        image = FileStorage(f)
+
+    # Mock the Flask request
+    mock_request = flask.Request.from_values(files={"image": image})
+
+    # Call the function
+    with app.test_request_context(method="POST", data=mock_request.data):
+        response = app.test_client().get("/predict")
+
+    # Parse the response JSON
+    response_data = json.loads(response.data.decode())
+
+    # Check the response
+    assert response_data["response"] == "OK"
+    assert response_data["predictions"]
+    assert len(response_data["predictions"]) == 3
+    assert isinstance(response_data["predictions"][0], dict)
+    assert "label" in response_data["predictions"][0]
+    assert "probability" in response_data["predictions"][0]
+
+def test_predict_with_invalid_image():
+    # Set up
+    invalid_image_path = "images/invalid_image_path.png"
+    with open(invalid_image_path, "rb") as f:
+        image = FileStorage(f)
+
+    # Mock the Flask request
+    mock_request = flask.Request.from_values(files={"image": image})
+
+    # Call the function
+    with app.test_request_context(method="POST", data=mock_request.data):
+        response = app.test_client().get("/predict")
+
+    # Check the response
+    assert response.status_code == 400
+    assert response.data == b"Invalid image format"
