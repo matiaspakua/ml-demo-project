@@ -2,7 +2,7 @@ import pytest
 import re
 import numpy as np
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from werkzeug.datastructures import FileStorage
 from PIL import Image
 from app import prepare_image
@@ -97,12 +97,12 @@ def test_predict_with_valid_image():
 
 def test_predict_with_invalid_image():
     # Set up
-    invalid_image_path = "images/invalid_image_path.png"
+    invalid_image_path = "images/test/invalid_image.png"
     with open(invalid_image_path, "rb") as f:
         image = FileStorage(f)
 
     # Mock the Flask request
-    mock_request = Flask.Request.from_values(files={"image": image})
+    mock_request = flask.Request.from_values(files={"image": image})
 
     # Call the function
     with app.test_request_context(method="POST", data=mock_request.data):
