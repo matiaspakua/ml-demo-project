@@ -77,7 +77,7 @@ def test_predict_with_valid_image():
         image = FileStorage(f)
 
     # Mock the Flask request
-    mock_request = flask.Request.from_values(files={"image": image})
+    mock_request = Flask.Request.from_values(files={"image": image})
 
     # Call the function
     with app.test_request_context(method="POST", data=mock_request.data):
@@ -101,7 +101,7 @@ def test_predict_with_invalid_image():
         image = FileStorage(f)
 
     # Mock the Flask request
-    mock_request = flask.Request.from_values(files={"image": image})
+    mock_request = Flask.Request.from_values(files={"image": image})
 
     # Call the function
     with app.test_request_context(method="POST", data=mock_request.data):
