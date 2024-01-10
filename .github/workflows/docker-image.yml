@@ -2,7 +2,7 @@ name: cd-build-publish-docker-image
 
 on:
   workflow_run:
-    workflows: ["ci-build-python-app"]
+    workflows: ["ci-build-and-test-python-app"]
     types: 
       - completed
   
