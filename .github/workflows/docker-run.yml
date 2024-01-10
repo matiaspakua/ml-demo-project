@@ -1,4 +1,4 @@
-name: run-docker-image
+name: cd-pull-and-run-docker-image-aws-ec2
 on:
   workflow_run:
     workflows: ["cd-build-publish-docker-image"]
