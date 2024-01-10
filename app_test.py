@@ -4,6 +4,7 @@ import numpy as np
 from flask import Flask, render_template
 from werkzeug.datastructures import FileStorage
 from PIL import Image
+from app import prepare_image
 
 
 @pytest.fixture
