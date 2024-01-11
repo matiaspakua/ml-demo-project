@@ -5,8 +5,7 @@ import json
 from flask import Flask, render_template, request
 from werkzeug.datastructures import FileStorage
 from PIL import Image
-from app import prepare_image
-
+from app import prepare_image, predict
 
 @pytest.fixture
 def app():
@@ -15,7 +14,6 @@ def app():
     def home():
         return render_template("view.html")
     return app
-
 
 def test_home_endpoint(app):
     with app.test_client() as client:
@@ -62,4 +60,25 @@ def test_prepare_image_with_invalid_image_path():
     # Call the function
     with pytest.raises(FileNotFoundError):
         img_array = prepare_image(invalid_image_path)
+
+
+
+def test_predict_endpoint(app):
+    # You may need to adjust the following based on your actual file path and image file
+    image_file_path = "images/test/image.jpg"
+    
+    # Send a POST request to the /predict endpoint
+    with open(image_file_path, "rb") as image_file:
+        response = app.post("/predict", data={"image": (image_file, "image.jpg")})
+
+    # Check if the response status code is 200 (OK)
+    assert response.status_code == 200
+
+    # Add more assertions based on the expected behavior of your endpoint
+    # For example, you might want to check if the response contains certain elements
+    assert b"Processing image..." in response.data
+    assert b"Calling to model..." in response.data
+    assert b"result.html" in response.data
+    assert b"label" in response.data
+    assert b"probability" in response.data
 
