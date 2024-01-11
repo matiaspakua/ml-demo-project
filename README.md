@@ -138,15 +138,15 @@ $ pytest.exe -vv --html=report.html app_test.py
 
 This command will execute and generate a HTML report as follow:
 
-![[pytest_console_execution.png]]
+![](https://github.com/matiaspakua/ml-demo-project/blob/41dfcf17f023099ce6c6aaf74e14806fc7952eb4/images/pytest_console_execution.png)
 
 The report can be opened with any browser:
 
-![[pytest_report.png]]
+![](https://github.com/matiaspakua/ml-demo-project/blob/41dfcf17f023099ce6c6aaf74e14806fc7952eb4/images/pytest_report.png)
 
 And even, the test execution and result can be monitored in the GitHub Action Pipeline:
 
-![[pytest_ci_build_execution.png]]
+![](https://github.com/matiaspakua/ml-demo-project/blob/41dfcf17f023099ce6c6aaf74e14806fc7952eb4/images/pytest_ci_build_execution.png)
 
 ## Acceptance Testing
 
