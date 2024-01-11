@@ -29,6 +29,7 @@ def prepare_image(image):
     img = Image.open(image)
     img = img.resize((224, 224))
     img_array = np.array(img)
+    LOG.info(f"Format, resize and process image...")
     img_array = preprocess_input(img_array)
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
@@ -48,5 +49,6 @@ def predict():
         response.append({"label": result[1], "probability": float(result[2])})
     return render_template("result.html", response=response)    
 
+# Expose the Flask application to port 8080.
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
