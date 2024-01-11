@@ -64,7 +64,7 @@ Validate that the workflows works properly:
 
 The last step is wait until the image is pulled and running in the EC2 Ubuntu instance and access the public URL to log into the landing page of the app:
 
-[Landing page on EC2 instance](http://ec2-54-227-35-67.compute-1.amazonaws.com:8080/)
+[Landing page on EC2 instance](http://ec2-52-23-199-2.compute-1.amazonaws.com:8080/)
 
 ![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/ml_demo_landing_page.png)
 
