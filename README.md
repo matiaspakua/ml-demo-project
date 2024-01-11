@@ -9,6 +9,10 @@
 
 This is the demonstration project for the Course - Duke university: **Specialization Building Cloud Computing Solutions at Scale** by Noah Gift.
 
+Link to the Specialization in Coursera: [Building Cloud Computing Solutions at Scale Specialization - Duke University & Coursera](https://www.coursera.org/specializations/building-cloud-computing-solutions-at-scale)
+
+Link to my personal notes: [Specialization](https://matiaspakua.github.io/tech.notes.io/pages/general_topic/specialization_building_cloud_computing_solutions_at_scale.html)
+
 This project demonstrates how to develop a Flask web application for image classification using the MobileNetV2 pre-trained model from TensorFlow Hub. MobileNetV2 is a lightweight convolutional neural network (CNN) architecture, making it ideal for deploying on mobile devices and web applications.
 
 [Pre-Trained Model webpage](https://pytorch.org/hub/pytorch_vision_mobilenet_v2/)
