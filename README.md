@@ -126,6 +126,28 @@ The development flow need to follow the best practices:
 8. Integration / acceptance testing
 9. Documentation.
 
+## Unit Testing with Pytest
+
+The project comes with a very basic unit test in the file: "app_test.py".
+
+To execute the tests and view the report, prompt the following:
+
+```bash
+$ pytest.exe -vv --html=report.html app_test.py
+```
+
+This command will execute and generate a HTML report as follow:
+
+![[pytest_console_execution.png]]
+
+The report can be opened with any browser:
+
+![[pytest_report.png]]
+
+And even, the test execution and result can be monitored in the GitHub Action Pipeline:
+
+![[pytest_ci_build_execution.png]]
+
 ## Acceptance Testing
 
 For the validation of the current application exits a series of images in the folder: **/images/test/** that can be used to "acceptance testing" as follow:
