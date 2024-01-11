@@ -15,7 +15,7 @@ install:
 
 test:
 	@echo "Unit Test execution..."
-	python -m pytest -vv app_test.py
+	python -m pytest -vv --html=report.html app_test.py
 
 format:
 	@echo "Files formar according to black library conventions..."
