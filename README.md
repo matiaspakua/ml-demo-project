@@ -170,3 +170,25 @@ For the validation of the current application exits a series of images in the fo
 Each result gives 3 matches from the highest to the lowest probability of similarity, like the following example:
 
 ![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/images_probability_result.png)
+
+
+## Load Test Cases
+
+For the load test, the tool: https://locust.io/ was used. There is a "task" defined for the "/" home endpoint and another task defined for the "/predict" endpoint:
+
+
+![](../../images/locust_main.png)
+
+
+![](../../images/locust_load_graph.png)
+
+To the execution, run the following command on the root of the project:
+
+![](../../images/locust_execution.png)
+
+
+## To-Do
+
+1. Publish the docker image in DockerHub as private.
+2. Deploy the private image in ubuntu using SSH Keys.
+3. Change deploy platform to Digital Ocean: https://m.do.co/c/97f4ed2d8b7a
