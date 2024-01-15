@@ -66,7 +66,7 @@ The last step is wait until the image is pulled and running in the EC2 Ubuntu in
 
 [Landing page on EC2 instance](http://ec2-52-23-199-2.compute-1.amazonaws.com:8080/)
 
-![](https://github.com/matiaspakua/ml-demo-project/blob/9b3386851c91e22ca4bbfdb473904c94de1dbc81/images/ml_demo_landing_page.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/4a9fc571ee3aa40d55b1b63cd7ccbb18466a83d5/images/ml_demo_landing_page.png)
 
 ## Project Setup and Deployment
 
@@ -177,14 +177,14 @@ Each result gives 3 matches from the highest to the lowest probability of simila
 For the load test, the tool: https://locust.io/ was used. There is a "task" defined for the "/" home endpoint and another task defined for the "/predict" endpoint:
 
 
-![](../../images/locust_main.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/4a9fc571ee3aa40d55b1b63cd7ccbb18466a83d5/images/locust_main.png)
 
 
-![](../../images/locust_load_graph.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/4a9fc571ee3aa40d55b1b63cd7ccbb18466a83d5/images/locust_load_graph.png)
 
 To the execution, run the following command on the root of the project:
 
-![](../../images/locust_execution.png)
+![](https://github.com/matiaspakua/ml-demo-project/blob/4a9fc571ee3aa40d55b1b63cd7ccbb18466a83d5/images/locust_execution.png)
 
 
 ## To-Do
