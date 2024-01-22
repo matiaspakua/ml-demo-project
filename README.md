@@ -32,6 +32,8 @@ The project is structured as follows:
 4. **app_test.py:** this file contains the unit test for each method (using pytest).>
 5. **Dockerfile**: file that create the image of the APP to be deployed in a environment where docker is available.
 6. **requirements.txt** : file that contains all the dependency needed by the project.
+
+
 ## Project Deployment Workflow
 
 The following diagram describe the high level architecture of the Application and the CI/CD process:
@@ -131,6 +133,7 @@ The development flow need to follow the best practices:
 7. Verify CD
 8. Integration / acceptance testing
 9. Documentation.
+10. Load Test
 
 ## Unit Testing with Pytest
 
