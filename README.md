@@ -3,6 +3,7 @@
 | 1. CI Status <br>(build and test) | 2. CD status <br>(docker build and push in DockerHub) | 3. CD Status <br>(AWS EC2 / AZURE - docker pull and run) |
 | ---- | ---- | ---- |
 | [![ci-build-python-app](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/python-app.yml) | [![cd-build-publish-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-image.yml) | [![run-docker-image](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/docker-run.yml) or [![cd-pull-and-run-docker-image-azure](https://github.com/matiaspakua/ml-demo-project/actions/workflows/deploy-azure.yml/badge.svg?branch=main)](https://github.com/matiaspakua/ml-demo-project/actions/workflows/deploy-azure.yml)|
+
 # Project Overview
 
 ![](https://github.com/matiaspakua/ml-demo-project/blob/6fc5d9fdc0420bba543e1fa9322527c45772c173/images/image_classificator.jpg)
@@ -22,6 +23,12 @@ The project utilizes the TensorFlow Hub library to load the pre-trained MobileNe
 [TensoyFlow Project](https://www.tensorflow.org/)
 
 [Hub of pre-trained models](https://www.kaggle.com/models?tfhub-redirect=true)
+
+## Live App
+
+ - The app is live in this URL: [ML Image Classificator](https://ml-demo-project-app.azurewebsites.net/)
+
+
 # Project Structure
 
 The project is structured as follows:
