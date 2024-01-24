@@ -1,0 +1,28 @@
+name: cd-pull-and-run-docker-image-aws-ec2
+on:
+  workflow_run:
+    workflows: ["cd-build-publish-docker-image"]
+    types:
+      - completed
+jobs:
+  run:      
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
+      - name: 'Run Azure CLI commands'
+        run: |
+          az containerapp up \
+            --name ml-demo-project-app \
+            --resource-group asdasdasd \
+            --location eastus \
+            --environment 'my-container-apps' \
+            --image matiasmiguez/ml-demo-project:latest \
+            --target-port 8080 \
+            --ingress external \
+            --query properties.configuration.ingress.fqdn
