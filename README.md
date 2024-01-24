@@ -79,7 +79,8 @@ Validate that the workflows works properly:
 The last step is wait until the image is pulled and running in the EC2 Ubuntu or in AZURE Container instance and access the public URL to log into the landing page of the app:
 (Depending of the Free Tier that I have at the moment I use one or another)
 
- * AWS EC2: [Landing page on EC2 instance](http://ec2-54-172-218-192.compute-1.amazonaws.com:8080/)
+
+ * AWS EC2: [Landing page on EC2 instance](http://ec2-54-163-54-125.compute-1.amazonaws.com:8080)
  * Azure Container: [Landing page on AZURE instance](https://ml-demo-project-app.azurewebsites.net/)
 
 
