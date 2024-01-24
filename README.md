@@ -1,4 +1,4 @@
-# Python Flask ML Demo Project with CI/CD in AWS EC2
+# Python Flask ML Demo Project with CI/CD
 
 | 1. CI Status <br>(build and test) | 2. CD status <br>(docker build and push in DockerHub) | 3. CD Status <br>(AWS EC2 docker pull and run) |
 | ---- | ---- | ---- |
@@ -50,9 +50,14 @@ Then a docker image is create and pushed in DockerHub public repository in anoth
 [Link to YML: docker-image.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-image.yml)
 
 ### Step 03
-A third workflow is executed when the first two are executed successfully and the image is pulled and deployed in a AWS Ubuntu EC2 instance.
+A third workflow is executed when the first two are executed successfully and the image is pulled and deployed in a AWS Ubuntu EC2 instance or AZURE Container Instance:
 
-[Link to YML: docker-run.yml](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-run.yml)
+[Link to YML: docker-run.yml AWS EC2](https://github.com/matiaspakua/ml-demo-project/blob/189d424ad72ed630ede8a489aa8804dd2a153403/.github/workflows/docker-run.yml)
+
+or 
+
+[Link to YML: docker-run.yml AZURE](https://github.com/matiaspakua/ml-demo-project/blob/e6cf710bdd2e8c2b8ab3675e4599f919735db657/.github/workflows/deploy-azure.yml)
+
 
 ![](https://github.com/matiaspakua/ml-demo-project/blob/595a2ebac6d0ec0e2d49d64d78ba06951692cab6/images/docker_hub_image_push.png)
 
@@ -64,9 +69,12 @@ Validate that the workflows works properly:
 
 ### Step 05
 
-The last step is wait until the image is pulled and running in the EC2 Ubuntu instance and access the public URL to log into the landing page of the app:
+The last step is wait until the image is pulled and running in the EC2 Ubuntu or in AZURE Container instance and access the public URL to log into the landing page of the app:
+(Depending of the Free Tier that I have at the moment I use one or another)
 
-[Landing page on EC2 instance](http://ec2-54-172-218-192.compute-1.amazonaws.com:8080/)
+ * AWS EC2: [Landing page on EC2 instance](http://ec2-54-172-218-192.compute-1.amazonaws.com:8080/)
+ * Azure Container: [Landing page on AZURE instance](https://ml-demo-project-app.azurewebsites.net/)
+
 
 ![](https://github.com/matiaspakua/ml-demo-project/blob/4a9fc571ee3aa40d55b1b63cd7ccbb18466a83d5/images/ml_demo_landing_page.png)
 
@@ -85,7 +93,7 @@ The last step is wait until the image is pulled and running in the EC2 Ubuntu in
 
 5. validate that all the dependencies listed in the "requirements.txt" are properly installed.
 
-### Setup AWS EC2 instance
+### Example of Setup AWS EC2 instance
 
 Launch new instance of EC2 with Ubuntu 20.04, using all the default parameters of the Free-Tier.
 
