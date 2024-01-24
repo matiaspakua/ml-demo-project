@@ -4,6 +4,11 @@ on:
     workflows: ["cd-build-publish-docker-image"]
     types:
       - completed
+
+permissions:
+  id-token: write
+  contents: read
+      
 jobs:
   run:      
     runs-on: ubuntu-latest
