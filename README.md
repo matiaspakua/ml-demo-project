@@ -26,7 +26,7 @@ The project utilizes the TensorFlow Hub library to load the pre-trained MobileNe
 
 ## Live App
 
- - The app is live in this URL: [ML Image Classificator](https://ml-demo-project-app.azurewebsites.net/)
+ - The app is live in this URL: [ML Image Classificator](https://ml-demo.azurewebsites.net/)
 
 
 # Project Structure
@@ -81,7 +81,7 @@ The last step is wait until the image is pulled and running in the EC2 Ubuntu or
 
 
  * AWS EC2: [Landing page on EC2 instance](http://ec2-54-163-54-125.compute-1.amazonaws.com:8080)
- * Azure Container: [Landing page on AZURE instance](https://ml-demo-project-app.azurewebsites.net/)
+ * Azure Container: [Landing page on AZURE instance](https://ml-demo.azurewebsites.net/)
 
 
 ![](https://github.com/matiaspakua/ml-demo-project/blob/4a9fc571ee3aa40d55b1b63cd7ccbb18466a83d5/images/ml_demo_landing_page.png)
