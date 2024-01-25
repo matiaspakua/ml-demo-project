@@ -57,9 +57,29 @@
 
 	  <p>The MobileNetV2 model is a convolutional neural network that is designed to classify images into 1000 object categories, such as keyboard, mouse, pencil, and many animals. The model is trained on more than a million images from the ImageNet database.</p>
 	</div>
-    <form action="/predict" method="post" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <input type="submit" value="Classify Image">
-    </form>
+    	 <script>
+		function validateFile() {
+			var fileInput = document.getElementById('image');
+			var submitButton = document.getElementById('submitButton');
+
+			if (fileInput.files.length > 0) {
+				var fileName = fileInput.files[0].name;
+				var fileExtension = fileName.split('.').pop().toLowerCase();
+
+				if (fileExtension === 'jpg') {
+					submitButton.disabled = false;
+				} else {
+					alert('Only JPG images are allowed.');
+					submitButton.disabled = true;
+				}
+			}
+		}
+	</script>
+
+	<form action="/predict" method="post" enctype="multipart/form-data">
+		<input type="file" name="image" id="image" accept=".jpg" onchange="validateFile()" required>
+		<p style="color: red;">Only JPG images are allowed.</p>
+		<input type="submit" value="Classify Image" id="submitButton" disabled>
+	</form>
 </body>
 </html>
