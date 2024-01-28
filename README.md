@@ -29,6 +29,24 @@ The project utilizes the TensorFlow Hub library to load the pre-trained MobileNe
  - (AZURE): The app is live in this URL: [ML Image Classificator](https://ml-demo.azurewebsites.net/)
  - (AWS): The app is live in this URL: [ML Image Classificator](http://ec2-34-207-152-164.compute-1.amazonaws.com:8080)
 
+## Run Locally
+
+If the previous links are down (maybe my free-tier is over), you can run the app locally after installing python and the project dependencies:
+
+Step 1: clone the repository.
+Step 2. Install Python 3.11
+Step 3. Install dependencies. 
+
+```bash
+$ pip install -r requirements.txt
+```
+
+Step 4. Run the project:
+
+```bash
+$ python app.py
+```
+
 # Project Structure
 
 The project is structured as follows:
