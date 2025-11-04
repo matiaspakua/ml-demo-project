@@ -35,13 +35,19 @@ If the previous links are down (maybe my free-tier is over), you can run the app
 
 Step 1: clone the repository.
 Step 2. Install Python 3.11
-Step 3. Install dependencies. 
+Step 3. Create a virtual environment:
+
+```bash
+python3 -m venv ml-demo
+```
+
+Step 4. Install dependencies. 
 
 ```bash
 $ pip install -r requirements.txt
 ```
 
-Step 4. Run the project:
+Step 5. Run the project:
 
 ```bash
 $ python app.py
