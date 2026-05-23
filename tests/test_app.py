@@ -101,6 +101,8 @@ class TestPredictEndpoint:
             content_type="multipart/form-data",
         )
         assert response.status_code == 400
+        content = response.data.decode("utf-8")
+        assert "No image file provided" in content
 
     def test_predict_rejects_get_request(self, client):
         response = client.get("/predict")
