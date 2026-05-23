@@ -17,14 +17,13 @@ class TestHomeEndpoint:
     def test_home_contains_form(self, client):
         response = client.get("/")
         content = response.data.decode("utf-8")
-        assert '<form action="/predict"' in content
+        assert '<form id="uploadForm"' in content
         assert 'input type="file"' in content
-        assert 'input type="submit"' in content
 
     def test_home_contains_title(self, client):
         response = client.get("/")
         content = response.data.decode("utf-8")
-        assert "Python/Flask Image Classification App with ML" in content
+        assert "ML Image Classification" in content
 
 
 class TestPrepareImage:
@@ -93,7 +92,7 @@ class TestPredictEndpoint:
             content_type="multipart/form-data",
         )
         content = response.data.decode("utf-8")
-        assert "Image Classification Result" in content
+        assert "Classification Results" in content
 
     def test_predict_returns_400_without_image(self, client):
         response = client.post(
