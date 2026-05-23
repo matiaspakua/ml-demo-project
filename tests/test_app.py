@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from io import BytesIO
 from PIL import Image as PILImage
-from app import prepare_image
+from app import prepare_image, allowed_file
 
 
 class TestHomeEndpoint:
@@ -52,6 +52,23 @@ class TestPrepareImage:
             prepare_image("images/invalid_image_path.jpg")
 
 
+class TestAllowedFile:
+    def test_allows_jpg(self):
+        assert allowed_file("image.jpg") is True
+
+    def test_allows_jpg_uppercase(self):
+        assert allowed_file("image.JPG") is True
+
+    def test_rejects_png(self):
+        assert allowed_file("image.png") is False
+
+    def test_rejects_no_extension(self):
+        assert allowed_file("image") is False
+
+    def test_rejects_empty_filename(self):
+        assert allowed_file("") is False
+
+
 class TestPredictEndpoint:
     def test_predict_returns_200_with_valid_image(self, client, valid_image_bytes):
         response = client.post(
@@ -89,3 +106,41 @@ class TestPredictEndpoint:
     def test_predict_rejects_get_request(self, client):
         response = client.get("/predict")
         assert response.status_code == 405
+
+    def test_predict_rejects_png_file(self, client, valid_image_bytes):
+        response = client.post(
+            "/predict",
+            data={"image": (valid_image_bytes, "test.png")},
+            content_type="multipart/form-data",
+        )
+        assert response.status_code == 400
+        content = response.data.decode("utf-8")
+        assert "Only .jpg images are allowed" in content
+
+    def test_predict_rejects_txt_file(self, client):
+        response = client.post(
+            "/predict",
+            data={"image": (BytesIO(b"not an image"), "document.txt")},
+            content_type="multipart/form-data",
+        )
+        assert response.status_code == 400
+        content = response.data.decode("utf-8")
+        assert "Only .jpg images are allowed" in content
+
+    def test_predict_rejects_corrupted_jpg(self, client):
+        response = client.post(
+            "/predict",
+            data={"image": (BytesIO(b"not an image"), "image.jpg")},
+            content_type="multipart/form-data",
+        )
+        assert response.status_code == 400
+        content = response.data.decode("utf-8")
+        assert "not a valid image" in content
+
+    def test_predict_rejects_empty_filename(self, client, valid_image_bytes):
+        response = client.post(
+            "/predict",
+            data={"image": (valid_image_bytes, "")},
+            content_type="multipart/form-data",
+        )
+        assert response.status_code == 400

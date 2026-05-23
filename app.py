@@ -1,7 +1,8 @@
 import tensorflow as tf
 import numpy as np
 import logging
-from PIL import Image
+from pathlib import Path
+from PIL import Image, UnidentifiedImageError
 from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
 from flask import Flask, request, render_template
 from flask.logging import create_logger
@@ -19,13 +20,24 @@ model = MobileNetV2(weights="imagenet")
 def home():
     return render_template("view.html")
 
+ALLOWED_EXTENSIONS = {".jpg"}
+
+
+def allowed_file(filename):
+    return Path(filename).suffix.lower() in ALLOWED_EXTENSIONS
+
+
 # Preprocessing an image before feeding it into a neural network, specifically a MobileNetV2 model. It
 # resizes the image to a square shape with dimensions of 224x224 pixels. MobileNetV2, expect input
 # images of a specific size.
 # The deep learning framework Keras preprocesses the image array to be compatible with the MobileNetV2
 # model. It may involve normalization and other transformations.
 def prepare_image(image):
-    img = Image.open(image)
+    try:
+        img = Image.open(image)
+    except UnidentifiedImageError:
+        LOG.error("Uploaded file is not a valid image")
+        raise
     img = img.resize((224, 224))
     img_array = np.array(img)
     LOG.info("Format, resize and process image...")
@@ -37,9 +49,15 @@ def prepare_image(image):
 # The model return a list of the top 3 posible results with highest probability.
 @app.route("/predict", methods=["POST"])
 def predict():
-    image = request.files["image"]
+    image_file = request.files["image"]
+    if image_file.filename == "" or not allowed_file(image_file.filename):
+        LOG.warning(f"Invalid file type: {image_file.filename}")
+        return render_template("view.html", error="Only .jpg images are allowed."), 400
     LOG.info("Processing image...")
-    img_array = prepare_image(image)
+    try:
+        img_array = prepare_image(image_file)
+    except UnidentifiedImageError:
+        return render_template("view.html", error="The uploaded file is not a valid image."), 400
     LOG.info("Calling to model...")
     prediction = model.predict(img_array)
     results = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=3)[0]

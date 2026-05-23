@@ -76,6 +76,9 @@
 		}
 	</script>
 
+	{% if error %}
+		<p style="color: red; text-align: center;"><strong>{{ error }}</strong></p>
+	{% endif %}
 	<form action="/predict" method="post" enctype="multipart/form-data">
 		<input type="file" name="image" id="image" accept=".jpg" onchange="validateFile()" required>
 		<p style="color: red;">Only JPG images are allowed.</p>
