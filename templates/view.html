@@ -1,88 +1,383 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ML Image Classificator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Image Classification — MobileNetV2</title>
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --accent: #06b6d4;
+            --surface: #ffffff;
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,.08), 0 4px 10px -5px rgba(0,0,0,.04);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-        h1 {
+
+        /* ─── Header ─── */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            padding: 3rem 1.5rem 8rem;
             text-align: center;
-            margin-top: 50px;
-            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 50px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        .header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,.12) 0%, transparent 60%);
+            pointer-events: none;
         }
-        input[type=file] {
-            margin-top: 20px;
-            margin-bottom: 20px;
+        .header-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+        .header h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -.025em; margin-bottom: .5rem; }
+        .header p { font-size: 1.1rem; opacity: .85; max-width: 560px; margin: 0 auto; }
+
+        /* ─── Container ─── */
+        .container { max-width: 920px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* ─── Upload Card ─── */
+        .upload-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+            margin-top: -5.5rem;
+            position: relative;
+            z-index: 2;
         }
-        input[type=submit] {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+        .upload-card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: .25rem;
+        }
+        .upload-card .subtitle {
+            color: var(--text-secondary);
+            font-size: .9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 3rem 2rem;
+            text-align: center;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: border-color .2s, background .2s;
         }
-        input[type=submit]:hover {
-            background-color: #3e8e41;
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: var(--primary);
+            background: #f1f5ff;
         }
-		.medium-img {
-		    display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 300px;  /* Adjust as needed */
-            height: 200px; /* Adjust as needed */
+        .drop-zone .icon { font-size: 2.5rem; margin-bottom: .75rem; }
+        .drop-zone p { font-size: .95rem; color: var(--text-secondary); }
+        .drop-zone .browse-link {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .drop-zone .hint { font-size: .8rem; color: var(--text-secondary); margin-top: .5rem; }
+        .drop-zone input[type="file"] { display: none; }
+
+        .file-info {
+            display: none;
+            align-items: center;
+            gap: .75rem;
+            padding: 1rem 1.25rem;
+            background: #f1f5ff;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .file-info.show { display: flex; }
+        .file-info .name { font-weight: 600; font-size: .9rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-info .change { color: var(--primary); font-size: .8rem; cursor: pointer; font-weight: 600; }
+
+        .classify-btn {
+            display: block;
+            width: 100%;
+            padding: .85rem;
+            margin-top: 1.25rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity .2s, transform .1s;
+        }
+        .classify-btn:disabled { opacity: .4; cursor: not-allowed; }
+        .classify-btn:not(:disabled):hover { opacity: .9; }
+        .classify-btn:not(:disabled):active { transform: scale(.98); }
+        .classify-btn.loading { pointer-events: none; }
+        .classify-btn .spinner { display: none; vertical-align: middle; margin-right: .5rem; }
+        .classify-btn.loading .spinner { display: inline-block; }
+        .classify-btn.loading .btn-text { opacity: .7; }
+
+        .error-msg {
+            display: none;
+            margin-top: 1rem;
+            padding: .75rem 1rem;
+            background: #fef2f2;
+            color: #dc2626;
+            border-radius: 8px;
+            font-size: .9rem;
+            font-weight: 500;
+        }
+        .error-msg.show { display: block; }
+
+        /* ─── Pipeline Section ─── */
+        .pipeline {
+            margin: 4rem auto;
+            max-width: 920px;
+            padding: 0 1.5rem;
+        }
+        .pipeline h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: .5rem;
+        }
+        .pipeline > .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: .95rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .pipeline-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            position: relative;
+        }
+        .pipeline-steps::before {
+            content: "";
+            position: absolute;
+            top: 2rem;
+            left: 12%;
+            right: 12%;
+            height: 3px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .step .circle {
+            width: 4rem;
+            height: 4rem;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--surface);
+            border: 3px solid var(--border);
+            transition: all .3s;
+        }
+        .step .label { font-weight: 700; font-size: .9rem; margin-bottom: .25rem; }
+        .step .desc { font-size: .8rem; color: var(--text-secondary); line-height: 1.4; }
+        .step:hover .circle {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99,102,241,.15);
+        }
+
+        /* ─── About Section ─── */
+        .about {
+            max-width: 640px;
+            margin: 3rem auto 4rem;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+        .about h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .75rem; }
+        .about p { color: var(--text-secondary); font-size: .9rem; line-height: 1.7; }
+        .about .tech-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-top: 1.25rem; }
+        .about .tech-badges span {
+            padding: .35rem .85rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* ─── Footer ─── */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            font-size: .8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 700px) {
+            .header h1 { font-size: 1.8rem; }
+            .pipeline-steps { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .pipeline-steps::before { display: none; }
+            .upload-card { padding: 1.5rem; }
+            .drop-zone { padding: 2rem 1rem; }
         }
     </style>
 </head>
 <body>
-	 <div style="text-align: left; max-width: 800px; margin: auto;">
-	  <h1>Python/Flask Image Classification App with ML</h1>
 
-      <img src="/static/image_classificator.jpg" alt="Image" class="medium-img">
+<header class="header">
+    <div class="header-content">
+        <h1>ML Image Classification</h1>
+        <p>Upload a photo and let a deep neural network identify what it sees — powered by MobileNetV2 and TensorFlow.</p>
+    </div>
+</header>
 
-	  <p>This is a Python Flask application that uses TensorFlow and the MobileNetV2 model to classify images. The app is automatically deployed from a GitHub repository using a CI/CD pipeline (workflows) with GitHub Actions.</p>
+<main class="container">
 
-	  <p>The MobileNetV2 model is a convolutional neural network that is designed to classify images into 1000 object categories, such as keyboard, mouse, pencil, and many animals. The model is trained on more than a million images from the ImageNet database.</p>
-	</div>
-    	 <script>
-		function validateFile() {
-			var fileInput = document.getElementById('image');
-			var submitButton = document.getElementById('submitButton');
+    <div class="upload-card">
+        <h2>Classify an Image</h2>
+        <p class="subtitle">Select a .jpg file and the model will return its top 3 predictions.</p>
 
-			if (fileInput.files.length > 0) {
-				var fileName = fileInput.files[0].name;
-				var fileExtension = fileName.split('.').pop().toLowerCase();
+        <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
+            <div class="drop-zone" id="dropZone">
+                <div class="icon">📁</div>
+                <p>Drag &amp; drop your image here, or <span class="browse-link" id="browseLink">browse</span></p>
+                <p class="hint">Only .jpg files are accepted</p>
+                <input type="file" name="image" id="fileInput" accept=".jpg" required>
+            </div>
 
-				if (fileExtension === 'jpg') {
-					submitButton.disabled = false;
-				} else {
-					alert('Only JPG images are allowed.');
-					submitButton.disabled = true;
-				}
-			}
-		}
-	</script>
+            <div class="file-info" id="fileInfo">
+                <span style="font-size:1.25rem;">🖼️</span>
+                <span class="name" id="fileName"></span>
+                <span class="change" id="changeFile">Change</span>
+            </div>
 
-	{% if error %}
-		<p style="color: red; text-align: center;"><strong>{{ error }}</strong></p>
-	{% endif %}
-	<form action="/predict" method="post" enctype="multipart/form-data">
-		<input type="file" name="image" id="image" accept=".jpg" onchange="validateFile()" required>
-		<p style="color: red;">Only JPG images are allowed.</p>
-		<input type="submit" value="Classify Image" id="submitButton" disabled>
-	</form>
+            <button type="submit" class="classify-btn" id="submitBtn" disabled>
+                <span class="spinner">⏳</span>
+                <span class="btn-text">Classify Image</span>
+            </button>
+
+            {% if error %}
+            <div class="error-msg show">{{ error }}</div>
+            {% endif %}
+        </form>
+    </div>
+
+</main>
+
+<section class="pipeline">
+    <h2>How It Works</h2>
+    <p class="subtitle">The inference pipeline runs entirely on-device — from upload to prediction in milliseconds.</p>
+
+    <div class="pipeline-steps">
+        <div class="step">
+            <div class="circle">📤</div>
+            <div class="label">Upload</div>
+            <div class="desc">Your image is sent to the server as a multipart form.</div>
+        </div>
+        <div class="step">
+            <div class="circle">🔧</div>
+            <div class="label">Preprocess</div>
+            <div class="desc">Resized to 224×224 and normalized via <code>preprocess_input</code>.</div>
+        </div>
+        <div class="step">
+            <div class="circle">🧠</div>
+            <div class="label">Model</div>
+            <div class="desc">MobileNetV2 runs inference — 1&nbsp;000 class scores are computed.</div>
+        </div>
+        <div class="step">
+            <div class="circle">📊</div>
+            <div class="label">Results</div>
+            <div class="desc">Top-3 predictions are decoded and displayed with confidence.</div>
+        </div>
+    </div>
+</section>
+
+<section class="about">
+    <h3>Built with</h3>
+    <div class="tech-badges">
+        <span>Python</span>
+        <span>Flask</span>
+        <span>TensorFlow</span>
+        <span>MobileNetV2</span>
+        <span>Pillow</span>
+        <span>NumPy</span>
+    </div>
+    <p style="margin-top:1.5rem;">
+        This application is a portfolio project demonstrating a complete ML inference pipeline:
+        from a user-friendly web interface through model inference, deployed with CI/CD and Docker.
+    </p>
+</section>
+
+<footer class="footer">
+    ML Image Classification &bull; MobileNetV2 &bull; TensorFlow &bull; Flask
+</footer>
+
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const changeFile = document.getElementById('changeFile');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('uploadForm');
+
+    function updateFileInfo(file) {
+        if (!file) {
+            fileInfo.classList.remove('show');
+            submitBtn.disabled = true;
+            return;
+        }
+        fileName.textContent = file.name;
+        fileInfo.classList.add('show');
+        submitBtn.disabled = false;
+    }
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) updateFileInfo(fileInput.files[0]);
+    });
+
+    changeFile.addEventListener('click', () => { fileInput.value = ''; fileInput.click(); });
+
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+            const f = e.dataTransfer.files[0];
+            if (!f.name.toLowerCase().endsWith('.jpg')) { alert('Only .jpg files are allowed.'); return; }
+            fileInput.files = e.dataTransfer.files;
+            updateFileInfo(f);
+        }
+    });
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    form.addEventListener('submit', () => {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+    });
+</script>
 </body>
 </html>
