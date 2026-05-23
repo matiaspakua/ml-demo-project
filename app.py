@@ -5,6 +5,7 @@ import logging
 from pathlib import Path
 from PIL import Image, UnidentifiedImageError
 from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
+from werkzeug.exceptions import BadRequestKeyError
 from flask import Flask, request, render_template
 from flask.logging import create_logger
 
@@ -43,7 +44,10 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    image_file = request.files["image"]
+    try:
+        image_file = request.files["image"]
+    except BadRequestKeyError:
+        return render_template("view.html", error="No image file provided."), 400
     if image_file.filename == "" or not allowed_file(image_file.filename):
         LOG.warning(f"Invalid file type: {image_file.filename}")
         return render_template("view.html", error="Only .jpg images are allowed."), 400
