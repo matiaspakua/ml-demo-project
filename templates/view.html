@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Image Classification — MobileNetV2</title>
+    <title>ML Image Classification — MobileNet</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,7 +30,6 @@
             min-height: 100vh;
         }
 
-        /* ─── Header ─── */
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             color: #fff;
@@ -50,10 +49,8 @@
         .header h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -.025em; margin-bottom: .5rem; }
         .header p { font-size: 1.1rem; opacity: .85; max-width: 560px; margin: 0 auto; }
 
-        /* ─── Container ─── */
         .container { max-width: 920px; margin: 0 auto; padding: 0 1.5rem; }
 
-        /* ─── Upload Card ─── */
         .upload-card {
             background: var(--surface);
             border-radius: var(--radius);
@@ -63,52 +60,79 @@
             position: relative;
             z-index: 2;
         }
-        .upload-card h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: .25rem;
+        .upload-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .25rem; }
+        .upload-card .subtitle { color: var(--text-secondary); font-size: .9rem; margin-bottom: 1.5rem; }
+
+        .form-row {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
-        .upload-card .subtitle {
+        .form-row .drop-section { flex: 2; min-width: 240px; }
+        .form-row .model-section { flex: 1; min-width: 180px; }
+
+        .model-selector label {
+            display: block;
+            font-size: .85rem;
+            font-weight: 700;
             color: var(--text-secondary);
+            margin-bottom: .5rem;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+        .model-selector select {
+            width: 100%;
+            padding: .65rem .75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
             font-size: .9rem;
-            margin-bottom: 1.5rem;
+            font-weight: 600;
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            transition: border-color .2s;
+            appearance: auto;
+        }
+        .model-selector select:hover,
+        .model-selector select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .model-selector .model-info {
+            font-size: .75rem;
+            color: var(--text-secondary);
+            margin-top: .4rem;
+            line-height: 1.4;
         }
 
         .drop-zone {
             border: 2px dashed var(--border);
             border-radius: 10px;
-            padding: 3rem 2rem;
+            padding: 2rem 1.5rem;
             text-align: center;
             cursor: pointer;
             transition: border-color .2s, background .2s;
         }
-        .drop-zone:hover,
-        .drop-zone.dragover {
-            border-color: var(--primary);
-            background: #f1f5ff;
-        }
-        .drop-zone .icon { font-size: 2.5rem; margin-bottom: .75rem; }
-        .drop-zone p { font-size: .95rem; color: var(--text-secondary); }
-        .drop-zone .browse-link {
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .drop-zone .hint { font-size: .8rem; color: var(--text-secondary); margin-top: .5rem; }
+        .drop-zone:hover, .drop-zone.dragover { border-color: var(--primary); background: #f1f5ff; }
+        .drop-zone .icon { font-size: 2rem; margin-bottom: .5rem; }
+        .drop-zone p { font-size: .9rem; color: var(--text-secondary); }
+        .drop-zone .browse-link { color: var(--primary); font-weight: 600; cursor: pointer; }
+        .drop-zone .hint { font-size: .78rem; color: var(--text-secondary); margin-top: .35rem; }
         .drop-zone input[type="file"] { display: none; }
 
         .file-info {
             display: none;
             align-items: center;
             gap: .75rem;
-            padding: 1rem 1.25rem;
+            padding: .75rem 1rem;
             background: #f1f5ff;
             border-radius: 8px;
-            margin-top: 1rem;
+            margin-top: .75rem;
         }
         .file-info.show { display: flex; }
-        .file-info .name { font-weight: 600; font-size: .9rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .file-info .change { color: var(--primary); font-size: .8rem; cursor: pointer; font-weight: 600; }
+        .file-info .name { font-weight: 600; font-size: .85rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-info .change { color: var(--primary); font-size: .78rem; cursor: pointer; font-weight: 600; }
 
         .classify-btn {
             display: block;
@@ -144,24 +168,13 @@
         }
         .error-msg.show { display: block; }
 
-        /* ─── Pipeline Section ─── */
         .pipeline {
             margin: 4rem auto;
             max-width: 920px;
             padding: 0 1.5rem;
         }
-        .pipeline h2 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: .5rem;
-        }
-        .pipeline > .subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: .95rem;
-            margin-bottom: 2.5rem;
-        }
+        .pipeline h2 { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: .5rem; }
+        .pipeline > .subtitle { text-align: center; color: var(--text-secondary); font-size: .95rem; margin-bottom: 2.5rem; }
 
         .pipeline-steps {
             display: grid;
@@ -179,33 +192,63 @@
             background: var(--border);
             z-index: 0;
         }
-
-        .step {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
+        .step { text-align: center; position: relative; z-index: 1; }
         .step .circle {
-            width: 4rem;
-            height: 4rem;
-            margin: 0 auto 1rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            background: var(--surface);
-            border: 3px solid var(--border);
-            transition: all .3s;
+            width: 4rem; height: 4rem; margin: 0 auto 1rem; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+            background: var(--surface); border: 3px solid var(--border); transition: all .3s;
         }
         .step .label { font-weight: 700; font-size: .9rem; margin-bottom: .25rem; }
         .step .desc { font-size: .8rem; color: var(--text-secondary); line-height: 1.4; }
-        .step:hover .circle {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(99,102,241,.15);
-        }
+        .step:hover .circle { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,.15); }
 
-        /* ─── About Section ─── */
+        .arch-compare {
+            margin: 4rem auto;
+            max-width: 920px;
+            padding: 0 1.5rem;
+        }
+        .arch-compare h2 { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: .5rem; }
+        .arch-compare > .subtitle { text-align: center; color: var(--text-secondary); font-size: .95rem; margin-bottom: 2rem; }
+
+        .arch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        .arch-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: box-shadow .2s;
+        }
+        .arch-card:hover { box-shadow: var(--shadow); }
+        .arch-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+        .arch-card h3 .badge {
+            display: inline-block;
+            font-size: .65rem;
+            font-weight: 700;
+            padding: .15rem .5rem;
+            border-radius: 10px;
+            vertical-align: middle;
+            margin-left: .35rem;
+        }
+        .badge-v2 { background: #dbeafe; color: #1d4ed8; }
+        .badge-v3 { background: #fce7f3; color: #be185d; }
+        .badge-default { background: #fef3c7; color: #b45309; }
+        .arch-card .stat { display: flex; justify-content: space-between; padding: .3rem 0; font-size: .85rem; border-bottom: 1px solid var(--border); }
+        .arch-card .stat:last-child { border-bottom: none; }
+        .arch-card .stat .key { color: var(--text-secondary); }
+        .arch-card .stat .val { font-weight: 700; }
+        .arch-card .arrow-desc { font-size: .8rem; color: var(--text-secondary); margin-top: .75rem; line-height: 1.5; }
+
+        .arch-diagram {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .arch-diagram svg { max-width: 100%; height: auto; }
+        .arch-diagram .caption { font-size: .8rem; color: var(--text-secondary); margin-top: .5rem; }
+
         .about {
             max-width: 640px;
             margin: 3rem auto 4rem;
@@ -225,7 +268,6 @@
             color: var(--text-secondary);
         }
 
-        /* ─── Footer ─── */
         .footer {
             text-align: center;
             padding: 2rem 1.5rem;
@@ -234,13 +276,14 @@
             border-top: 1px solid var(--border);
         }
 
-        /* ─── Responsive ─── */
         @media (max-width: 700px) {
             .header h1 { font-size: 1.8rem; }
             .pipeline-steps { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
             .pipeline-steps::before { display: none; }
             .upload-card { padding: 1.5rem; }
-            .drop-zone { padding: 2rem 1rem; }
+            .drop-zone { padding: 1.5rem 1rem; }
+            .arch-grid { grid-template-columns: 1fr; }
+            .form-row { flex-direction: column; }
         }
     </style>
 </head>
@@ -249,7 +292,7 @@
 <header class="header">
     <div class="header-content">
         <h1>ML Image Classification</h1>
-        <p>Upload a photo and let a deep neural network identify what it sees — powered by MobileNetV2 and TensorFlow.</p>
+        <p>Upload a photo and let a deep neural network identify what it sees — choose between MobileNetV2 or MobileNetV3.</p>
     </div>
 </header>
 
@@ -257,20 +300,39 @@
 
     <div class="upload-card">
         <h2>Classify an Image</h2>
-        <p class="subtitle">Select a .jpg file and the model will return its top 3 predictions.</p>
+        <p class="subtitle">Select a model and upload a .jpg file to get the top 3 predictions.</p>
 
         <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
-            <div class="drop-zone" id="dropZone">
-                <div class="icon">📁</div>
-                <p>Drag &amp; drop your image here, or <span class="browse-link" id="browseLink">browse</span></p>
-                <p class="hint">Only .jpg files are accepted</p>
-                <input type="file" name="image" id="fileInput" accept=".jpg" required>
-            </div>
-
-            <div class="file-info" id="fileInfo">
-                <span style="font-size:1.25rem;">🖼️</span>
-                <span class="name" id="fileName"></span>
-                <span class="change" id="changeFile">Change</span>
+            <div class="form-row">
+                <div class="drop-section">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="icon">📁</div>
+                        <p>Drag &amp; drop your image here, or <span class="browse-link" id="browseLink">browse</span></p>
+                        <p class="hint">Only .jpg files are accepted</p>
+                        <input type="file" name="image" id="fileInput" accept=".jpg" required>
+                    </div>
+                    <div class="file-info" id="fileInfo">
+                        <span style="font-size:1.25rem;">🖼️</span>
+                        <span class="name" id="fileName"></span>
+                        <span class="change" id="changeFile">Change</span>
+                    </div>
+                </div>
+                <div class="model-section">
+                    <div class="model-selector">
+                        <label for="modelSelect">Neural Network</label>
+                        <select name="model" id="modelSelect">
+                            {% for key, label in models.items() %}
+                            <option value="{{ key }}" {% if key == default_model %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="model-info" id="modelInfo">
+                            <strong>MobileNetV2:</strong> 3.5M params, 71.8% top-1<br>
+                            <strong>V3 Large:</strong> 5.4M params, 75.8% top-1
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <button type="submit" class="classify-btn" id="submitBtn" disabled>
@@ -294,23 +356,96 @@
         <div class="step">
             <div class="circle">📤</div>
             <div class="label">Upload</div>
-            <div class="desc">Your image is sent to the server as a multipart form.</div>
+            <div class="desc">Your image is sent to the server along with the selected model.</div>
         </div>
         <div class="step">
             <div class="circle">🔧</div>
             <div class="label">Preprocess</div>
-            <div class="desc">Resized to 224×224 and normalized via <code>preprocess_input</code>.</div>
+            <div class="desc">Resized to 224×224 and normalized for the chosen model.</div>
         </div>
         <div class="step">
             <div class="circle">🧠</div>
             <div class="label">Model</div>
-            <div class="desc">MobileNetV2 runs inference — 1&nbsp;000 class scores are computed.</div>
+            <div class="desc">V2 or V3 runs inference — 1&nbsp;000 class scores computed.</div>
         </div>
         <div class="step">
             <div class="circle">📊</div>
             <div class="label">Results</div>
-            <div class="desc">Top-3 predictions are decoded and displayed with confidence.</div>
+            <div class="desc">Top-3 predictions decoded with confidence scores.</div>
         </div>
+    </div>
+</section>
+
+<section class="arch-compare">
+    <h2>MobileNet Architecture: V2 vs V3</h2>
+    <p class="subtitle">Both are efficient CNN architectures designed for mobile/edge devices. Here's how they compare.</p>
+
+    <div class="arch-grid">
+        <div class="arch-card">
+            <h3>MobileNetV2 <span class="badge badge-v2">V2</span></h3>
+            <div class="stat"><span class="key">Parameters</span><span class="val">3.5 million</span></div>
+            <div class="stat"><span class="key">Top-1 Accuracy</span><span class="val">71.8%</span></div>
+            <div class="stat"><span class="key">Inference Speed</span><span class="val">Faster</span></div>
+            <div class="stat"><span class="key">Key Innovation</span><span class="val">Inverted Residuals + Linear Bottlenecks</span></div>
+            <div class="arrow-desc">
+                Introduces <strong>bottleneck residual blocks</strong> (inverted residuals) where the input and output are thin, while the expansion happens inside the block. Uses <strong>ReLU6</strong> activations and <strong>depthwise separable convolutions</strong> to keep the model lightweight. The linear bottleneck avoids information loss from non-linearities in narrow layers.
+            </div>
+        </div>
+        <div class="arch-card">
+            <h3>MobileNetV3 Large <span class="badge badge-v3">V3</span><span class="badge badge-default">NEW</span></h3>
+            <div class="stat"><span class="key">Parameters</span><span class="val">5.4 million</span></div>
+            <div class="stat"><span class="key">Top-1 Accuracy</span><span class="val">75.8%</span></div>
+            <div class="stat"><span class="key">Inference Speed</span><span class="val">Slightly slower</span></div>
+            <div class="stat"><span class="key">Key Innovation</span><span class="val">NAS + NetAdapt + Squeeze-and-Excite</span></div>
+            <div class="arrow-desc">
+                Built on V2's inverted residuals but improved with <strong>Neural Architecture Search (NAS)</strong> and <strong>NetAdapt</strong> for optimal layer design. Adds <strong>Squeeze-and-Excite (SE)</strong> attention modules that adaptively recalibrate channel-wise feature responses. Uses <strong>hard-swish</strong> activation and a redesigned <strong>h-sigmoid</strong> for the SE gating function.
+            </div>
+        </div>
+    </div>
+
+    <div class="arch-diagram">
+        <svg viewBox="0 0 700 140" xmlns="http://www.w3.org/2000/svg" style="font-family:system-ui,sans-serif;">
+            <rect x="10" y="10" width="140" height="50" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+            <text x="80" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#4338ca">Input 224×224</text>
+
+            <rect x="180" y="10" width="120" height="50" rx="8" fill="#ccfbf1" stroke="#14b8a6" stroke-width="2"/>
+            <text x="240" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#0f766e">Conv 1×1</text>
+
+            <rect x="330" y="10" width="120" height="50" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+            <text x="390" y="42" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">DWConv 3×3</text>
+
+            <rect x="480" y="10" width="120" height="50" rx="8" fill="#ccfbf1" stroke="#14b8a6" stroke-width="2"/>
+            <text x="540" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#0f766e">Conv 1×1</text>
+
+            <rect x="630" y="10" width="60" height="50" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+            <text x="660" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#4338ca">+</text>
+
+            <line x1="150" y1="35" x2="180" y2="35" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="300" y1="35" x2="330" y2="35" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="450" y1="35" x2="480" y2="35" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="600" y1="35" x2="630" y2="35" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+            <line x1="650" y1="60" x2="650" y2="80" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="650" y="95" text-anchor="middle" font-size="10" fill="#64748b">× 17</text>
+
+            <rect x="570" y="100" width="120" height="40" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+            <text x="630" y="126" text-anchor="middle" font-size="12" font-weight="700" fill="#4338ca">Global AvgPool</text>
+
+            <line x1="650" y1="95" x2="630" y2="100" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+            <rect x="10" y="100" width="120" height="40" rx="8" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+            <text x="70" y="126" text-anchor="middle" font-size="12" font-weight="700" fill="#be185d">SE Block (V3)</text>
+
+            <line x1="130" y1="120" x2="570" y2="120" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="350" y="115" text-anchor="middle" font-size="9" fill="#64748b">V3 only: Squeeze-and-Excite attention</text>
+
+            <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/>
+                </marker>
+            </defs>
+        </svg>
+        <div class="caption">Bottleneck residual block architecture shared by V2 and V3. V3 adds Squeeze-and-Excite (SE) attention between the depthwise and pointwise convolutions, plus uses hard-swish activation and NAS-optimized channel counts.</div>
     </div>
 </section>
 
@@ -321,6 +456,7 @@
         <span>Flask</span>
         <span>TensorFlow</span>
         <span>MobileNetV2</span>
+        <span>MobileNetV3</span>
         <span>Pillow</span>
         <span>NumPy</span>
     </div>
@@ -331,7 +467,7 @@
 </section>
 
 <footer class="footer">
-    ML Image Classification &bull; MobileNetV2 &bull; TensorFlow &bull; Flask
+    ML Image Classification &bull; MobileNetV2 / V3 &bull; TensorFlow &bull; Flask
 </footer>
 
 <script>
@@ -344,11 +480,7 @@
     const form = document.getElementById('uploadForm');
 
     function updateFileInfo(file) {
-        if (!file) {
-            fileInfo.classList.remove('show');
-            submitBtn.disabled = true;
-            return;
-        }
+        if (!file) { fileInfo.classList.remove('show'); submitBtn.disabled = true; return; }
         fileName.textContent = file.name;
         fileInfo.classList.add('show');
         submitBtn.disabled = false;
@@ -357,27 +489,19 @@
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) updateFileInfo(fileInput.files[0]);
     });
-
     changeFile.addEventListener('click', () => { fileInput.value = ''; fileInput.click(); });
-
     dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
     dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
     dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
+        e.preventDefault(); dropZone.classList.remove('dragover');
         if (e.dataTransfer.files.length > 0) {
             const f = e.dataTransfer.files[0];
             if (!f.name.toLowerCase().endsWith('.jpg')) { alert('Only .jpg files are allowed.'); return; }
-            fileInput.files = e.dataTransfer.files;
-            updateFileInfo(f);
+            fileInput.files = e.dataTransfer.files; updateFileInfo(f);
         }
     });
     dropZone.addEventListener('click', () => fileInput.click());
-
-    form.addEventListener('submit', () => {
-        submitBtn.disabled = true;
-        submitBtn.classList.add('loading');
-    });
+    form.addEventListener('submit', () => { submitBtn.disabled = true; submitBtn.classList.add('loading'); });
 </script>
 </body>
 </html>
