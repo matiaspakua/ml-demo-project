@@ -40,7 +40,7 @@ jobs:
         black *.py
     - name: Test with pytest
       run: |
-        pytest -vv --html=report.html app_test.py
+        pytest -vv --html=report.html tests/
     - name: HTML Preview
       id: html_preview
       uses: pavi2410/html-preview-action@v2
