@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 8111
 
 # Start the Flask application
-CMD ["python", "app.py"]
+CMD ["python", "src/run.py"]

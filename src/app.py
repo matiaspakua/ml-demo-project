@@ -1,40 +1,26 @@
 import time
-import tensorflow as tf
-import numpy as np
 import logging
-from pathlib import Path
-from PIL import Image, UnidentifiedImageError
-from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
 from werkzeug.exceptions import BadRequestKeyError
 from flask import Flask, request, render_template
 from flask.logging import create_logger
 
-app = Flask(__name__)
+from src.image_utils import prepare_image, allowed_file
+from src.model_loader import load_model, decode_predictions, get_model_info, MODEL_REGISTRY
+
+app = Flask(__name__, template_folder="../templates")
 LOG = create_logger(app)
 LOG.setLevel(logging.INFO)
 
-model = MobileNetV2(weights="imagenet")
-
-MODEL_INPUT_SIZE = (224, 224)
-ALLOWED_EXTENSIONS = {".jpg"}
+DEFAULT_MODEL = "mobilenet_v2"
 
 
-def allowed_file(filename):
-    return Path(filename).suffix.lower() in ALLOWED_EXTENSIONS
-
-
-def prepare_image(image):
-    try:
-        img = Image.open(image)
-    except UnidentifiedImageError:
-        LOG.error("Uploaded file is not a valid image")
-        raise
-    img = img.resize(MODEL_INPUT_SIZE)
-    img_array = np.array(img)
-    LOG.info("Format, resize and process image...")
-    img_array = preprocess_input(img_array)
-    img_array = np.expand_dims(img_array, axis=0)
-    return img_array
+@app.context_processor
+def inject_globals():
+    model_info = {
+        name: info["label"]
+        for name, info in MODEL_REGISTRY.items()
+    }
+    return dict(models=model_info, default_model=DEFAULT_MODEL)
 
 
 @app.route("/")
@@ -48,24 +34,31 @@ def predict():
         image_file = request.files["image"]
     except BadRequestKeyError:
         return render_template("view.html", error="No image file provided."), 400
+
     if image_file.filename == "" or not allowed_file(image_file.filename):
-        LOG.warning(f"Invalid file type: {image_file.filename}")
+        LOG.warning("Invalid file type: %s", image_file.filename)
         return render_template("view.html", error="Only .jpg images are allowed."), 400
 
-    LOG.info("Processing image...")
+    model_name = request.form.get("model", DEFAULT_MODEL)
+    if model_name not in MODEL_REGISTRY:
+        model_name = DEFAULT_MODEL
+
+    LOG.info("Processing image with %s...", model_name)
     t0 = time.time()
 
     try:
-        img_array = prepare_image(image_file)
-    except UnidentifiedImageError:
+        img_array = prepare_image(image_file, model_name)
+    except Exception:
+        LOG.error("Uploaded file is not a valid image")
         return render_template("view.html", error="The uploaded file is not a valid image."), 400
     t1 = time.time()
 
-    LOG.info("Calling to model...")
-    prediction = model.predict(img_array)
+    LOG.info("Calling model %s...", model_name)
+    model = load_model(model_name)
+    prediction = model.predict(img_array, verbose=0)
     t2 = time.time()
 
-    results = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=3)[0]
+    results = decode_predictions(model_name, prediction, top=3)[0]
     response = []
     for result in results:
         response.append({"label": result[1], "probability": float(result[2])})
@@ -77,7 +70,9 @@ def predict():
         "decode_ms": round((t3 - t2) * 1000, 1),
         "total_ms": round((t3 - t0) * 1000, 1),
     }
-    return render_template("result.html", response=response, timing=timing)
+
+    model_info = get_model_info(model_name)
+    return render_template("result.html", response=response, timing=timing, model=model_info)
 
 
 if __name__ == "__main__":

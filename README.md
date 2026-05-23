@@ -8,7 +8,7 @@
 
 ## Project Overview
 
-A Flask web application for real-time image classification using **MobileNetV2**, a lightweight convolutional neural network pre-trained on ImageNet. Users upload a `.jpg` photo and the model returns its top 3 predictions with confidence scores — all in under a second.
+A Flask web application for real-time image classification using **MobileNetV2** and **MobileNetV3 Large**, lightweight convolutional neural networks pre-trained on ImageNet. Users upload a `.jpg` photo, select a model, and the server returns the top 3 predictions with confidence scores — all in under a second.
 
 Built as part of the Duke University **Building Cloud Computing Solutions at Scale** specialization by Noah Gift.
 
@@ -36,11 +36,20 @@ Upload → Preprocess → Model Inference → Results
 | Step | Description |
 |------|-------------|
 | **Upload** | User selects a `.jpg` file via drag-and-drop or file picker |
-| **Preprocess** | Image is resized to 224×224 and normalized with `preprocess_input` |
-| **Model** | MobileNetV2 computes confidence scores across 1,000 ImageNet classes |
-| **Results** | Top-3 predictions are displayed with animated confidence bars and timing |
+| **Preprocess** | Image is resized to 224×224 and normalized with the selected model's `preprocess_input` |
+| **Model** | MobileNetV2 (3.5M params, 71.8% top-1) or MobileNetV3 Large (5.4M params, 75.8% top-1) |
+| **Results** | Top-3 predictions displayed with animated confidence bars and timing per stage |
 
 Each stage's duration is measured and displayed on the results page.
+
+### Model Selection
+
+Users can switch between models via a dropdown on the landing page. Models are loaded lazily and cached after first inference. The selected model's details (name, params, accuracy) appear on the results page.
+
+| Model | Parameters | Top-1 Accuracy | Preprocess Function |
+|-------|-----------|----------------|-------------------|
+| MobileNetV2 | 3.5M | 71.8% | `mobilenet_v2_preprocess_input` |
+| MobileNetV3 Large | 5.4M | 75.8% | `mobilenet_v3_preprocess_input` |
 
 ## Run Locally
 
@@ -59,7 +68,28 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # 4. Run the app
-python app.py
+python src/run.py
+```
+
+Open [http://localhost:8111](http://localhost:8111) in your browser.
+
+## Docker
+
+```bash
+# Build the image
+docker build -t ml-demo .
+
+# Run the container (port 8111)
+docker run -d --name ml-demo -p 8111:8111 ml-demo
+
+# Stop the container
+docker stop ml-demo
+
+# Remove the container
+docker rm ml-demo
+
+# One-liner: stop and remove
+docker rm -f ml-demo
 ```
 
 Open [http://localhost:8111](http://localhost:8111) in your browser.
@@ -68,44 +98,90 @@ Open [http://localhost:8111](http://localhost:8111) in your browser.
 
 ```
 .
-├── .github/workflows/     # CI/CD pipeline definitions
-│   ├── python-app.yml     # Build, lint, format, test
-│   ├── docker-image.yml   # Docker build and push to DockerHub
-│   ├── docker-run.yml     # Deploy to AWS EC2
-│   └── deploy-azure.yml   # Deploy to Azure Container Instances
+├── .github/workflows/       # CI/CD pipeline definitions
+│   ├── python-app.yml       # Build, lint, format, test
+│   ├── docker-image.yml     # Docker build and push to DockerHub
+│   ├── docker-run.yml       # Deploy to AWS EC2
+│   ├── deploy-azure.yml     # Deploy to Azure Container Instances
+│   └── pages.yml            # Deploy landing page to GitHub Pages
+├── src/                     # Application package
+│   ├── __init__.py          # Package marker
+│   ├── app.py               # Flask routes, model selection, error handling
+│   ├── image_utils.py       # Image preprocessing, file validation
+│   └── model_loader.py      # Model registry, lazy loading, decode dispatch
 ├── templates/
-│   ├── view.html          # Landing page with upload form and pipeline viz
-│   └── result.html        # Results page with confidence bars and timing
+│   ├── view.html            # Landing page with model selector and architecture viz
+│   └── result.html          # Results page with confidence bars and timing
 ├── tests/
-│   ├── conftest.py        # Shared fixtures (Flask client, mock model, test images)
-│   └── test_app.py        # 21 tests (home, prepare_image, allowed_file, predict)
-├── images/test/           # Sample images for acceptance testing
-├── app.py                 # Flask application (routes, model loading, preprocessing)
-├── requirements.txt       # Pinned Python dependencies
-├── Dockerfile             # Container image definition
-└── locustfile.py          # Load testing with Locust
+│   ├── conftest.py          # Shared fixtures (Flask client, mock models, test images)
+│   └── test_app.py          # 30 tests (home, prepare_image, allowed_file, registry, predict)
+├── images/test/             # Sample images for acceptance testing
+├── src/run.py               # Entry point (python src/run.py)
+├── requirements.txt         # Pinned Python dependencies
+├── Dockerfile               # Container image definition
+└── tests/locustfile.py      # Load testing with Locust
 ```
 
-## Testing
+## Test Suite
 
-The project uses **pytest** with 21 tests covering the full application:
+Run the full test suite (unit + coverage + load) with a single command:
 
 ```bash
-python -m pytest -v tests/
+bash tests/run_tests.sh
 ```
 
-Add `--html=report.html` for an HTML report.
+This will:
+1. Run unit tests with coverage → `tests/report/unit.html`
+2. Start the Flask app on port 8111
+3. Run Locust load tests → `tests/report/load.html`
+4. Generate coverage report → `tests/report/coverage/index.html`
+5. Stop the app
 
-### Test Coverage
+### Unit Tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+Add `--html=tests/report/unit.html --self-contained-html` for an HTML report.
+
+#### Unit Test Coverage
 
 | Test Class | Tests | Description |
 |-----------|-------|-------------|
-| `TestHomeEndpoint` | 4 | Status codes, content types, form elements |
-| `TestPrepareImage` | 3 | Valid image, file-like object, invalid path |
+| `TestHomeEndpoint` | 5 | Status codes, content types, form elements, model selector |
+| `TestPrepareImage` | 4 | Valid image, file-like object, invalid path, model name param |
 | `TestAllowedFile` | 5 | Extension validation (.jpg, .JPG, .png, no ext, empty) |
-| `TestPredictEndpoint` | 9 | Valid prediction, HTML response, missing image, wrong extension, corrupted file, method not allowed |
+| `TestModelRegistry` | 4 | Registry entries, model info lookup, unknown model error |
+| `TestPredictEndpoint` | 12 | Valid prediction, HTML, model selection (V2, V3, unknown), missing file, wrong extension, corrupted file, empty filename, method not allowed |
 
-The ML model is mocked in tests to avoid slow inference.
+The ML models are mocked in tests to avoid slow inference.
+
+### Coverage
+
+```bash
+python -m pytest tests/ --cov=src --cov-report=html:tests/report/coverage
+```
+
+Open `tests/report/coverage/index.html` in a browser.
+
+### Load Tests
+
+Using [Locust](https://locust.io/):
+
+```bash
+# Headless (run for 30s with 10 users, HTML report)
+locust -f tests/locustfile.py --host=http://localhost:8111 --users=10 --spawn-rate=1 --run-time=30s --headless --html=tests/report/load.html
+
+# Web UI (open http://localhost:8089)
+locust -f tests/locustfile.py --host=http://localhost:8111
+```
+
+The `tests/locustfile.py` simulates four user profiles:
+- **HomepageUser** — browses the landing page
+- **PredictV2User** — uploads images with MobileNetV2
+- **PredictV3User** — uploads images with MobileNetV3 Large
+- **ErrorPathUser** — submits invalid requests (no file, wrong extension)
 
 ## Error Handling
 
@@ -114,6 +190,7 @@ The ML model is mocked in tests to avoid slow inference.
 | No file uploaded | 400 — "No image file provided." |
 | Non-.jpg extension | 400 — "Only .jpg images are allowed." |
 | Corrupted .jpg file | 400 — "The uploaded file is not a valid image." |
+| Empty filename | 400 — "Only .jpg images are allowed." |
 | GET request to /predict | 405 — Method Not Allowed |
 
 Both client-side (JavaScript) and server-side validation is enforced.
@@ -126,19 +203,13 @@ The CI/CD pipeline consists of three chained GitHub Actions workflows:
 2. **docker-image.yml** — On successful CI: builds Docker image and pushes to DockerHub
 3. **docker-run.yml / deploy-azure.yml** — On successful Docker push: pulls and runs on AWS EC2 or Azure
 
-## Load Testing
-
-Using [Locust](https://locust.io/):
-
-```bash
-locust -f locustfile.py --host=http://localhost:8111
-```
+The landing page is also deployed to **GitHub Pages** on every push.
 
 ## Tech Stack
 
 - **Python 3.11** — Runtime
 - **Flask** — Web framework
-- **TensorFlow / Keras** — MobileNetV2 model
+- **TensorFlow / Keras** — MobileNetV2 and MobileNetV3 Large
 - **Pillow** — Image handling
 - **NumPy** — Array operations
 - **pytest** — Testing framework

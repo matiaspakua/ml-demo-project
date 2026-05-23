@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 assets/
 report.html
+tests/report/
 
 # C extensions
 *.so
