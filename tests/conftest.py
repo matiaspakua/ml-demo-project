@@ -1,6 +1,11 @@
+import sys
+from pathlib import Path
+
 import pytest
 from io import BytesIO
 from PIL import Image as PILImage
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 VALID_IMAGE_PATH = "images/test/image.jpg"
@@ -35,6 +40,7 @@ def valid_image_bytes():
 @pytest.fixture(autouse=True)
 def mock_model(monkeypatch):
     import numpy as np
+
     class MockModel:
         def predict(self, img_array):
             predictions = np.zeros((1, 1000))
