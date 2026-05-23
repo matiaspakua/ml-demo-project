@@ -1,7 +1,6 @@
 import tensorflow as tf
 import numpy as np
 import logging
-import mlib
 from PIL import Image
 from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
 from flask import Flask, request, jsonify, render_template
