@@ -19,11 +19,11 @@ test:
 
 format:
 	@echo "Files formar according to black library conventions..."
-	black *.py
+	black src/ tests/
 
 lint:
 	@echo "Files linting..."
-	pylint --disable=R,C,W1203,W0702 *.py
+	pylint --disable=R,C,W1203,W0702 src/ tests/
 
 docker-build:
 	@echo "Docker build image..."

@@ -68,7 +68,28 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # 4. Run the app
-python app.py
+python src/run.py
+```
+
+Open [http://localhost:8111](http://localhost:8111) in your browser.
+
+## Docker
+
+```bash
+# Build the image
+docker build -t ml-demo .
+
+# Run the container (port 8111)
+docker run -d --name ml-demo -p 8111:8111 ml-demo
+
+# Stop the container
+docker stop ml-demo
+
+# Remove the container
+docker rm ml-demo
+
+# One-liner: stop and remove
+docker rm -f ml-demo
 ```
 
 Open [http://localhost:8111](http://localhost:8111) in your browser.
@@ -95,23 +116,36 @@ Open [http://localhost:8111](http://localhost:8111) in your browser.
 │   ├── conftest.py          # Shared fixtures (Flask client, mock models, test images)
 │   └── test_app.py          # 30 tests (home, prepare_image, allowed_file, registry, predict)
 ├── images/test/             # Sample images for acceptance testing
-├── app.py                   # Entry point delegating to src.app
+├── src/run.py               # Entry point (python src/run.py)
 ├── requirements.txt         # Pinned Python dependencies
 ├── Dockerfile               # Container image definition
-└── locustfile.py            # Load testing with Locust
+└── tests/locustfile.py      # Load testing with Locust
 ```
 
-## Testing
+## Test Suite
 
-The project uses **pytest** with 30 tests covering the full application:
+Run the full test suite (unit + coverage + load) with a single command:
 
 ```bash
-python -m pytest -v tests/
+bash tests/run_tests.sh
 ```
 
-Add `--html=report.html` for an HTML report.
+This will:
+1. Run unit tests with coverage → `tests/report/unit.html`
+2. Start the Flask app on port 8111
+3. Run Locust load tests → `tests/report/load.html`
+4. Generate coverage report → `tests/report/coverage/index.html`
+5. Stop the app
 
-### Test Coverage
+### Unit Tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+Add `--html=tests/report/unit.html --self-contained-html` for an HTML report.
+
+#### Unit Test Coverage
 
 | Test Class | Tests | Description |
 |-----------|-------|-------------|
@@ -122,6 +156,32 @@ Add `--html=report.html` for an HTML report.
 | `TestPredictEndpoint` | 12 | Valid prediction, HTML, model selection (V2, V3, unknown), missing file, wrong extension, corrupted file, empty filename, method not allowed |
 
 The ML models are mocked in tests to avoid slow inference.
+
+### Coverage
+
+```bash
+python -m pytest tests/ --cov=src --cov-report=html:tests/report/coverage
+```
+
+Open `tests/report/coverage/index.html` in a browser.
+
+### Load Tests
+
+Using [Locust](https://locust.io/):
+
+```bash
+# Headless (run for 30s with 10 users, HTML report)
+locust -f tests/locustfile.py --host=http://localhost:8111 --users=10 --spawn-rate=1 --run-time=30s --headless --html=tests/report/load.html
+
+# Web UI (open http://localhost:8089)
+locust -f tests/locustfile.py --host=http://localhost:8111
+```
+
+The `tests/locustfile.py` simulates four user profiles:
+- **HomepageUser** — browses the landing page
+- **PredictV2User** — uploads images with MobileNetV2
+- **PredictV3User** — uploads images with MobileNetV3 Large
+- **ErrorPathUser** — submits invalid requests (no file, wrong extension)
 
 ## Error Handling
 
@@ -144,14 +204,6 @@ The CI/CD pipeline consists of three chained GitHub Actions workflows:
 3. **docker-run.yml / deploy-azure.yml** — On successful Docker push: pulls and runs on AWS EC2 or Azure
 
 The landing page is also deployed to **GitHub Pages** on every push.
-
-## Load Testing
-
-Using [Locust](https://locust.io/):
-
-```bash
-locust -f locustfile.py --host=http://localhost:8111
-```
 
 ## Tech Stack
 

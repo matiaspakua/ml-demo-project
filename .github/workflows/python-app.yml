@@ -37,10 +37,10 @@ jobs:
     - name: Format python code with Black
       run: |
         ## run black formatter
-        black *.py
+        black src/ tests/
     - name: Test with pytest
       run: |
-        pytest -vv --html=report.html tests/
+        pytest -vv --cov=src --cov-report=term --html=report.html tests/
     - name: HTML Preview
       id: html_preview
       uses: pavi2410/html-preview-action@v2
