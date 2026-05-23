@@ -30,12 +30,12 @@ docker-build:
 	docker build -t ml-demo-project .
 
 docker-run:
-	@echo "Docker run image at port 8080..."
-	docker run -p 8080:8080 ml-demo-project-app
+	@echo "Docker run image at port 8111..."
+	docker run -p 8111:8111 ml-demo-project
 
 docker-debug:
 	@echo "Docker run and open IT console for degug..."
-	docker run -d -p 8080:8080 --name ml-demo-project-container ml-demo-project-app
+	docker run -d -p 8111:8111 --name ml-demo-project-container ml-demo-project
 	docker exec -it ml-demo-project-container bash
 
 docker-clean:

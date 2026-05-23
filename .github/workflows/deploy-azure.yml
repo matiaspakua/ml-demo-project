@@ -28,6 +28,6 @@ jobs:
             --location eastus \
             --environment 'my-container-apps' \
             --image matiasmiguez/ml-demo-project:latest \
-            --target-port 8080 \
+            --target-port 8111 \
             --ingress external \
             --query properties.configuration.ingress.fqdn
